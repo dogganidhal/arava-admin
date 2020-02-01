@@ -1,7 +1,12 @@
-import React from 'react';
-import {createMuiTheme, ThemeProvider, Typography} from "@material-ui/core";
-import { BrowserRouter } from "react-router-dom";
+import React, {useContext, useEffect} from 'react';
+import {createMuiTheme, ThemeProvider} from "@material-ui/core";
+import { BrowserRouter, Route } from "react-router-dom";
 import Nav from "./Nav";
+import NavigationConfig from "../Config/NavigationConfig";
+import useAuth from "../Hooks/UseAuth";
+import Login from "./Login";
+import AppLoader from "./AppLoader";
+import AuthContext from "../Context/AuthContext";
 
 const theme = createMuiTheme({
   palette: {
@@ -28,19 +33,29 @@ const theme = createMuiTheme({
 
 
 export default function App() {
-  return (
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Nav>
-          <Typography>
-            Hello World
-          </Typography>
-        </Nav>
-      </BrowserRouter>
-      <div>
-        <h4>Arava Admin</h4>
-        <p>Circular</p>
-      </div>
-    </ThemeProvider>
-  );
+  const {isLoading, loadAuth} = useAuth();
+  const {authenticated} = useContext(AuthContext);
+
+  useEffect(() => loadAuth(), []);
+
+  return <ThemeProvider theme={theme}>
+    {
+      isLoading && <AppLoader />
+    }
+    {
+      authenticated ?
+        <BrowserRouter>
+          <Nav>
+            {
+              NavigationConfig.routes.map((route, index) => (
+                <Route key={index} path={route.path} exact>
+                  {route.component}
+                </Route>
+              ))
+            }
+          </Nav>
+        </BrowserRouter> :
+        <Login />
+    }
+  </ThemeProvider>;
 };

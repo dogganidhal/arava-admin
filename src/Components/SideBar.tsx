@@ -5,7 +5,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import NavigationConfig from "../Config/NavigationConfig";
-import {useLocation} from "react-router-dom";
+import {useLocation, useHistory} from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme: Theme) => {
 export default function SideBar() {
 	const classes = useStyles();
 	const location = useLocation();
+	const navigation = useHistory();
 
 	return <Drawer
 		className={classes.drawer}
@@ -38,15 +39,20 @@ export default function SideBar() {
 		<List>
 			{
 				NavigationConfig.routes.map((route, index) => (
-					<ListItem button key={index} disabled={location.pathname === route.path}>
+					<ListItem
+						button
+						selected={location.pathname === route.path}
+						key={index}
+						disabled={location.pathname === route.path}
+						onClick={() => navigation.push(route.path)}>
 						<ListItemIcon>
 							{
-								location.pathname === route.path ? route.icon.selected : route.icon.unselected
+								route.icon
 							}
 						</ListItemIcon>
 						<ListItemText>
 							<Typography
-								color={location.pathname !== route.path ? "primary" : "inherit"} >
+								color={"primary"} >
 								{route.title}
 							</Typography>
 						</ListItemText>

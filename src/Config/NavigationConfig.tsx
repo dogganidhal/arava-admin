@@ -3,15 +3,15 @@ import PoiList from "../Components/PoiList";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 import {useTheme} from "@material-ui/core";
+import {faGlobeAsia, faMapMarker, faUser} from "@fortawesome/free-solid-svg-icons";
+import IslandList from "../Components/IslandList";
+import UserList from "../Components/UserList";
 
 interface IRouteConfig {
 	readonly path: string;
 	readonly title: string;
 	component: React.ReactElement;
-	icon: {
-		selected: React.ReactElement,
-		unselected: React.ReactElement
-	};
+	icon: React.ReactElement;
 	children?: IRouteConfig[];
 }
 
@@ -21,7 +21,6 @@ interface INavigationConfig {
 
 interface FontawesomeIconProps extends PropsWithChildren<{}> {
 	icon: IconProp;
-	selected: boolean
 }
 
 function StyledFontawesomeIcon(props: FontawesomeIconProps) {
@@ -30,14 +29,7 @@ function StyledFontawesomeIcon(props: FontawesomeIconProps) {
 	return <FontAwesomeIcon
 		size={"lg"}
 		icon={props.icon}
-		color={props.selected ? theme.palette.grey.A200 : theme.palette.primary.main}/>;
-}
-
-function fontawesomeToggleIcon(icon: IconProp) {
-	return {
-		selected: <StyledFontawesomeIcon icon={icon} selected={true} />,
-		unselected:  <StyledFontawesomeIcon icon={icon} selected={false} />
-	}
+		color={theme.palette.primary.main}/>;
 }
 
 const NavigationConfig: INavigationConfig = {
@@ -46,26 +38,20 @@ const NavigationConfig: INavigationConfig = {
 			path: '/pois',
 			title: `Points d'intérêt`,
 			component: <PoiList />,
-			icon: fontawesomeToggleIcon("map-marker-alt")
+			icon: <StyledFontawesomeIcon icon={faMapMarker} />
 		},
 		{
 			path: '/islands',
 			title: `Îles`,
-			component: <PoiList />,
-			icon: fontawesomeToggleIcon("island-tropical")
+			component: <IslandList />,
+			icon: <StyledFontawesomeIcon icon={faGlobeAsia} />
 		},
-		// {
-		// 	path: '/pois',
-		// 	title: `Points d'intérêt`,
-		// 	component: <PoiList />,
-		// 	icon: <img src={Placeholder} alt={"placeholder"}/>
-		// },
-		// {
-		// 	path: '/pois',
-		// 	title: `Points d'intérêt`,
-		// 	component: <PoiList />,
-		// 	icon: <img src={Placeholder} alt={"placeholder"}/>
-		// }
+		{
+			path: '/users',
+			title: `Utilisateurs`,
+			component: <UserList />,
+			icon: <StyledFontawesomeIcon icon={faUser} />
+		}
 	]
 };
 

@@ -1,9 +1,9 @@
 import {useContext} from "react";
-import ContainerContext from "../Config/Container";
 import {interfaces} from "inversify/dts/interfaces/interfaces";
+import ContainerContext from "../Context/ContainerContext";
 
 
-export default function useIoC<T>(constructor: interfaces.Newable<T>): T {
+export default function useIoC<T>(constructor: interfaces.ServiceIdentifier<T>): T {
 	const container = useContext(ContainerContext);
-	return container.resolve(constructor)
+	return container.get(constructor)
 }

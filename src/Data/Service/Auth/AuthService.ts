@@ -1,7 +1,7 @@
 import JwtAuthCredentials from "../../Model/JwtAuthCredentials";
 
 
-export default interface AuthService {
-	login(email: string, password: string): Promise<JwtAuthCredentials>;
-	refresh(refreshToken: string): Promise<JwtAuthCredentials>;
+export default abstract class AuthService {
+	abstract login(email: string, password: string): Promise<JwtAuthCredentials>;
+	abstract refresh(refreshToken: string): Promise<JwtAuthCredentials>;
 }

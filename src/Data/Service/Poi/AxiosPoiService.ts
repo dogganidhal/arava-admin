@@ -3,8 +3,10 @@ import PoiService from "./PoiService";
 import PoiWriteRequest from "../../Model/PoiWriteRequest";
 import PoiCategoryWriteRequest from "../../Model/PoiCategoryWriteRequest";
 import PoiTypeWriteRequest from "../../Model/PoiTypeWriteRequest";
+import {injectable} from "inversify";
 
 
+@injectable()
 export default class AxiosPoiService extends AbstractAxiosService implements PoiService {
 
 	createPoi(request: PoiWriteRequest): Promise<void> {

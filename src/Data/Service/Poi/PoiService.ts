@@ -3,8 +3,8 @@ import PoiCategoryWriteRequest from "../../Model/PoiCategoryWriteRequest";
 import PoiTypeWriteRequest from "../../Model/PoiTypeWriteRequest";
 
 
-export default interface PoiService {
-	createPoi(request: PoiWriteRequest): Promise<void>;
-	createPoiCategory(request: PoiCategoryWriteRequest): Promise<void>;
-	createPoiType(request: PoiTypeWriteRequest): Promise<void>;
+export default abstract class PoiService {
+	abstract createPoi(request: PoiWriteRequest): Promise<void>;
+	abstract createPoiCategory(request: PoiCategoryWriteRequest): Promise<void>;
+	abstract createPoiType(request: PoiTypeWriteRequest): Promise<void>;
 }

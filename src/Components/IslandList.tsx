@@ -2,10 +2,10 @@ import React from "react";
 import {Typography} from "@material-ui/core";
 
 
-export default function PoiList() {
+export default function IslandList() {
 
 
 	return <Typography>
-		Pois
+		Îles
 	</Typography>;
 }
