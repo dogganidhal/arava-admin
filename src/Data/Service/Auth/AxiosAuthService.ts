@@ -8,7 +8,7 @@ import {injectable} from "inversify";
 export default class AxiosAuthService extends AbstractAxiosService implements AuthService {
 
 	public async login(email: string, password: string): Promise<JwtAuthCredentials> {
-		return this.post("/auth/login", { email, password });
+		return this.post("/auth/login", { email, password, admin: true });
 	}
 
 	public async refresh(refreshToken: string): Promise<JwtAuthCredentials> {

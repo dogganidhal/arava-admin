@@ -41,15 +41,17 @@ export default function SideBar() {
 				NavigationConfig.routes.map((route, index) => (
 					<ListItem
 						button
-						selected={location.pathname === route.path}
+						selected={location.pathname.includes(route.path)}
 						key={index}
-						disabled={location.pathname === route.path}
+						disabled={location.pathname.includes(route.path)}
 						onClick={() => navigation.push(route.path)}>
-						<ListItemIcon>
-							{
-								route.icon
-							}
-						</ListItemIcon>
+						{
+							route.icon && <ListItemIcon>
+								{
+									route.icon
+								}
+              </ListItemIcon>
+						}
 						<ListItemText>
 							<Typography
 								color={"primary"} >

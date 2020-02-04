@@ -4,7 +4,7 @@ import AuthService from "../Data/Service/Auth/AuthService";
 import JwtAuthCredentials from "../Data/Model/JwtAuthCredentials";
 import AuthContext from "../Context/AuthContext";
 
-const kauthCredentialsKey = "com.arava.auth_credentials";
+export const kauthCredentialsKey = "com.arava.auth_credentials";
 
 export default function useAuth() {
 	const [isLoading, setLoading] = useState(false);

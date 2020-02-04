@@ -6,13 +6,15 @@ import {useTheme} from "@material-ui/core";
 import {faGlobeAsia, faMapMarker, faUser} from "@fortawesome/free-solid-svg-icons";
 import IslandList from "../Components/IslandList";
 import UserList from "../Components/UserList";
+import EditIsland from "../Components/EditIsland";
 
 interface IRouteConfig {
 	readonly path: string;
-	readonly title: string;
-	component: React.ReactElement;
-	icon: React.ReactElement;
-	children?: IRouteConfig[];
+	readonly title?: string;
+	readonly component: React.ReactElement;
+	readonly icon?: React.ReactElement;
+	readonly children?: IRouteConfig[];
+	readonly exact?: boolean;
 }
 
 interface INavigationConfig {
@@ -38,19 +40,26 @@ const NavigationConfig: INavigationConfig = {
 			path: '/pois',
 			title: `Points d'intérêt`,
 			component: <PoiList />,
-			icon: <StyledFontawesomeIcon icon={faMapMarker} />
+			icon: <StyledFontawesomeIcon icon={faMapMarker} />,
+			exact: true
 		},
 		{
 			path: '/islands',
 			title: `Îles`,
 			component: <IslandList />,
-			icon: <StyledFontawesomeIcon icon={faGlobeAsia} />
+			icon: <StyledFontawesomeIcon icon={faGlobeAsia} />,
+			exact: true
 		},
 		{
 			path: '/users',
 			title: `Utilisateurs`,
 			component: <UserList />,
-			icon: <StyledFontawesomeIcon icon={faUser} />
+			icon: <StyledFontawesomeIcon icon={faUser} />,
+			exact: true
+		},
+		{
+			path: '/islands/:islandId',
+			component: <EditIsland />
 		}
 	]
 };

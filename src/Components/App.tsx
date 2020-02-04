@@ -48,7 +48,7 @@ export default function App() {
           <Nav>
             {
               NavigationConfig.routes.map((route, index) => (
-                <Route key={index} path={route.path} exact>
+                <Route key={index} path={route.path} exact={route.exact}>
                   {route.component}
                 </Route>
               ))
