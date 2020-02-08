@@ -1,6 +1,11 @@
+import Language from "./Language";
 
 
-
-export default interface LocalizedResource {
-	[languageCode: string]: string;
+interface LocalizedString {
+	readonly resource: string;
+	readonly language: Language;
 }
+
+type LocalizedResource = LocalizedString[];
+
+export default LocalizedResource;

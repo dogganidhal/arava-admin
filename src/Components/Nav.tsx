@@ -28,9 +28,7 @@ const useStyles = makeStyles((theme: Theme) => {
 	});
 });
 
-interface NavProps extends PropsWithChildren<{}> {
-
-}
+type NavProps = PropsWithChildren<{}>;
 
 export default function Nav(props: PropsWithChildren<NavProps>) {
 	const classes = useStyles();

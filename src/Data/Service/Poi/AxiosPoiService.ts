@@ -8,6 +8,7 @@ import Poi from "../../Model/Poi";
 import Island from "../../Model/Island";
 import IslandUpdateRequest from "../../Model/IslandUpdateRequest";
 import Archipelago from "../../Model/Archipelago";
+import PoiCategory from "../../Model/PoiCategory";
 
 
 @injectable()
@@ -35,6 +36,10 @@ export default class AxiosPoiService extends AbstractAxiosService implements Poi
 
 	public async listArchipelagos(): Promise<Archipelago[]> {
 		return this.get("/archipelago");
+	}
+
+	public async listCategories(): Promise<PoiCategory[]> {
+		return this.get("/poi/category");
 	}
 
 	public async getIsland(id: string): Promise<Island> {

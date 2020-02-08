@@ -38,7 +38,9 @@ export default function SideBar() {
 		<div className={classes.toolbar} />
 		<List>
 			{
-				NavigationConfig.routes.map((route, index) => (
+				NavigationConfig.routes
+					.filter(route => route.title && route.icon)
+					.map((route, index) => (
 					<ListItem
 						button
 						selected={location.pathname.includes(route.path)}

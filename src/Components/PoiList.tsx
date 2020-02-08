@@ -1,10 +1,12 @@
 import React from "react";
-import {createStyles, Grid, Theme, Typography} from "@material-ui/core";
+import {createStyles, Fab, Grid, Theme, Typography} from "@material-ui/core";
 import usePoiListService from "../Hooks/UsePoiListService";
 import AppLoader from "./AppLoader";
 import Alert from "@material-ui/lab/Alert";
 import {makeStyles} from "@material-ui/core/styles";
 import PoiCard from "./PoiCard";
+import AddIcon from '@material-ui/icons/Add';
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -18,12 +20,18 @@ const useStyles = makeStyles((theme: Theme) =>
 		control: {
 			padding: theme.spacing(2),
 		},
+		fab: {
+			position: 'absolute',
+			right: theme.spacing(2),
+			bottom: theme.spacing(2),
+		}
 	}),
 );
 
 export default function PoiList() {
 	const classes = useStyles();
 	const [isLoading, exception, pois] = usePoiListService();
+	const navigation = useHistory();
 
 	if (isLoading) {
 		return <AppLoader />;
@@ -36,6 +44,15 @@ export default function PoiList() {
 	}
 
 	return <Grid container className={classes.root} justify={"center"} spacing={2}>
+		<Fab
+			variant={"extended"}
+			size={"large"} 
+			color={"primary"}
+			className={classes.fab}
+			onClick={() => navigation.push("/pois/create")}>
+			<AddIcon />
+			Créer
+		</Fab>
 		{
 			pois.map((poi, index) => (
 				<Grid item>

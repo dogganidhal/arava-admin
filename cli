@@ -5,7 +5,7 @@ then
    docker build -t arava-admin . || exit 1
    docker tag arava-admin registry.ndogga.com/arava/arava-admin:latest || exit 1
    docker push registry.ndogga.com/arava/arava-admin:latest || exit 1
-   curl -X POST https://portainer.ndogga.io/api/webhooks/fa92c7dc-8f1e-4fda-a275-ead3a12fca3e
+   curl -X POST https://portainer.ndogga.com/api/webhooks/342fec7a-fe32-4ae4-9c06-06c0f6027fbb
    echo "Successfully built and deployed to Portainer"
    exit 0
 fi

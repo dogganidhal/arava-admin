@@ -7,6 +7,7 @@ import {faGlobeAsia, faMapMarker, faUser} from "@fortawesome/free-solid-svg-icon
 import IslandList from "../Components/IslandList";
 import UserList from "../Components/UserList";
 import EditIsland from "../Components/EditIsland";
+import CreatePoi from "../Components/CreatePoi";
 
 interface IRouteConfig {
 	readonly path: string;
@@ -60,6 +61,10 @@ const NavigationConfig: INavigationConfig = {
 		{
 			path: '/islands/:islandId',
 			component: <EditIsland />
+		},
+		{
+			path: '/pois/create',
+			component: <CreatePoi />
 		}
 	]
 };

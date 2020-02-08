@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function IslandList() {
 	const classes = useStyles();
-	const [isLoading, exception, pois] = useIslandListService();
+	const [isLoading, exception, islands] = useIslandListService();
 
 	if (isLoading) {
 		return <AppLoader />;
@@ -39,11 +39,12 @@ export default function IslandList() {
 	return <div>
 		<Grid container className={classes.root} justify={"center"} spacing={2}>
 			{
-				pois.map((island, index) => (
-					<Grid item key={index}>
-						<IslandCard island={island} />
-					</Grid>
-				))
+				islands
+					.map((island, index) => (
+						<Grid item key={index}>
+							<IslandCard island={island} />
+						</Grid>
+					))
 			}
 		</Grid>
 	</div>;

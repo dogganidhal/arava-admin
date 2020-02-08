@@ -8,4 +8,5 @@ export default interface IslandUpdateRequest {
 	readonly latitude?: number;
 	readonly longitude?: number;
 	readonly zoom?: number;
+	readonly archipelagoId?: string;
 }

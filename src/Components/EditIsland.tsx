@@ -51,9 +51,6 @@ export default function EditIsland() {
 					<Button color="primary" onClick={() => navigation.push("/islands")}>
 						Îles
 					</Button>
-					<Button color="primary" onClick={() => navigation.push(`/archilepagos/${island.archipelago.id}`)}>
-						{island.archipelago.name}
-					</Button>
 					<Button disabled color="primary">
 						{island.name}
 					</Button>

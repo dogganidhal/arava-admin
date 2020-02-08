@@ -1,5 +1,5 @@
 import Island from "../Data/Model/Island";
-import React, {useCallback, useState} from "react";
+import React, {ChangeEvent, useCallback, useState} from "react";
 import {
 	Button, Card, CardActions, CardMedia, CircularProgress,
 	createStyles, FormControl, Grid, InputLabel,
@@ -11,15 +11,13 @@ import useArchipelagoListService from "../Hooks/UseArchipelagoListService";
 import IslandUpdateRequest from "../Data/Model/IslandUpdateRequest";
 import useIoC from "../Hooks/UseIoC";
 import PoiService from "../Data/Service/Poi/PoiService";
-import { useHistory } from "react-router-dom";
 import MediaService from "../Data/Service/Media/MediaService";
 import MediaWriteRequest from "../Data/Model/MediaWriteRequest";
+import {Autocomplete} from "@material-ui/lab";
+import Archipelago from "../Data/Model/Archipelago";
 
 const useStyles = makeStyles((theme: Theme) => {
 	return createStyles({
-		form: {
-
-		},
 		formControl: {
 			marginTop: theme.spacing(2)
 		},
@@ -71,17 +69,18 @@ export default function EditIslandForm({island}: EditIslandFormProps) {
 			id: island.id,
 			latitude: coordinate.latitude,
 			longitude: coordinate.longitude,
-			name, zoom, image
+			name, zoom, image,
+			archipelagoId: archipelago.id
 		};
 		poiService.updateIsland(request)
 			.then(() => setSuccess(true))
 			.catch(exception => setException(exception))
 			.finally(() => setLoading(false));
-	}, [imageFile]);
+	}, [imageFile, archipelago, coordinate, zoom]);
 
 	const closeSuccessSnackbar = () => setSuccess(false);
 
-	return <div className={classes.form}>
+	return <div>
 		{
 			exception && <Alert severity="error">
 				{exception.message}
@@ -107,30 +106,20 @@ export default function EditIslandForm({island}: EditIslandFormProps) {
 				value={name} variant={"filled"}
 				className={classes.formControl}
 				onChange={e => setName(e.target.value)}/>
-			<FormControl
-				fullWidth={true}
-				variant="filled"
-				className={classes.formControl}>
-				<InputLabel id="achipelago-label">Archipel</InputLabel>
-				<Select
-					id="achipelago-label"
-					value={archipelago.id}
-					onChange={e => setArchipelago(archipelagos.filter(a => a.id === e.target.value)[0])}>
-					{
-						archipelagosLoading && <span>
-							<Typography>
-								Chargement ...
-							</Typography>
-							<CircularProgress />
-						</span>
+			<Autocomplete
+				className={classes.formControl}
+				options={archipelagos}
+				getOptionLabel={option => option.name}
+				value={archipelago}
+				onChange={(_: ChangeEvent<{}>, archipelago: Archipelago | null) => {
+					if (archipelago) {
+						setArchipelago(archipelago);
 					}
-					{
-						archipelagos && archipelagos.map(archipelago => (
-							<MenuItem key={archipelago.id} value={archipelago.id}>{archipelago.name}</MenuItem>
-						))
-					}
-				</Select>
-			</FormControl>
+				}}
+				renderInput={params => (
+					<TextField {...params} label="Archipel" variant="filled" fullWidth />
+				)}
+			/>
 			<Grid container spacing={2} className={classes.formControl}>
 				<Grid item xs={4}>
 					<TextField
