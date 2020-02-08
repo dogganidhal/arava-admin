@@ -12,13 +12,12 @@ export default function configureAxios() {
 			const credentials: JwtAuthCredentials = JSON.parse(credentialsJson);
 			config.headers['Authorization'] = `${credentials.tokenType} ${credentials.accessToken}`;
 		} else {
-
+			// TODO: Handle missing authorization
 		}
-		console.log({config});
 		return config;
 	});
 	if (process.env.NODE_ENV === "development") {
 		Axios.interceptors.request.use(AxiosLogger.requestLogger);
-		Axios.interceptors.response.use(AxiosLogger.responseLogger);
+		// Axios.interceptors.response.use(AxiosLogger.responseLogger);
 	}
 }

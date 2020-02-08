@@ -2,7 +2,7 @@ import React, {useContext, useEffect} from 'react';
 import {createMuiTheme, ThemeProvider} from "@material-ui/core";
 import { BrowserRouter, Route } from "react-router-dom";
 import Nav from "./Nav";
-import NavigationConfig from "../Config/NavigationConfig";
+import NavigationConfig from "../Config/Navigation";
 import useAuth from "../Hooks/UseAuth";
 import Login from "./Login";
 import AppLoader from "./AppLoader";

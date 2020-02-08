@@ -9,9 +9,11 @@ import configureAxios from "./Config/Axios";
 import 'font-awesome/css/font-awesome.min.css';
 import ContainerContext from "./Context/ContainerContext";
 import AuthRequired from "./Components/AuthRequired";
+import configureFirebase from "./Config/Firebase";
 
 const container = createContainer();
 configureAxios();
+configureFirebase();
 
 ReactDOM.render(<ContainerContext.Provider value={container}>
 		<AuthRequired>

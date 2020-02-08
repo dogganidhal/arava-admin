@@ -17,7 +17,7 @@ export default abstract class AbstractAxiosService {
 
 	public async put<T>(uri: string, data: any): Promise<T> {
 		try {
-			const response = await Axios.post(uri, data);
+			const response = await Axios.put(uri, data);
 			return response.data as T;
 		} catch (e) {
 			throw e.response.data as ApiException;

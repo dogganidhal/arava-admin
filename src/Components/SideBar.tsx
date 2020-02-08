@@ -4,7 +4,7 @@ import {
 	ListItemText, makeStyles, Theme, Typography
 } from "@material-ui/core";
 import React from "react";
-import NavigationConfig from "../Config/NavigationConfig";
+import NavigationConfig from "../Config/Navigation";
 import {useLocation, useHistory} from "react-router-dom";
 
 const drawerWidth = 240;
