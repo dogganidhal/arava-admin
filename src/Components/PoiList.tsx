@@ -1,5 +1,5 @@
 import React from "react";
-import {createStyles, Fab, Grid, Theme, Typography} from "@material-ui/core";
+import {createStyles, Fab, Grid, Theme} from "@material-ui/core";
 import usePoiListService from "../Hooks/UsePoiListService";
 import AppLoader from "./AppLoader";
 import Alert from "@material-ui/lab/Alert";
@@ -7,6 +7,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import PoiCard from "./PoiCard";
 import AddIcon from '@material-ui/icons/Add';
 import {useHistory} from "react-router-dom";
+import Map from "./Map";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -44,6 +45,7 @@ export default function PoiList() {
 	}
 
 	return <Grid container className={classes.root} justify={"center"} spacing={2}>
+
 		<Fab
 			variant={"extended"}
 			size={"large"} 

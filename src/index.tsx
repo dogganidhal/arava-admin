@@ -10,16 +10,22 @@ import 'font-awesome/css/font-awesome.min.css';
 import ContainerContext from "./Context/ContainerContext";
 import AuthRequired from "./Components/AuthRequired";
 import configureFirebase from "./Config/Firebase";
+import MomentUtils from "@date-io/moment";
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
-const container = createContainer();
+
 configureAxios();
 configureFirebase();
-
-ReactDOM.render(<ContainerContext.Provider value={container}>
+const container = createContainer();
+const rootComponent = <ContainerContext.Provider value={container}>
+	<MuiPickersUtilsProvider utils={MomentUtils} locale={"fr_FR"}>
 		<AuthRequired>
 			<App />
 		</AuthRequired>
-</ContainerContext.Provider>, document.getElementById('root'));
+	</MuiPickersUtilsProvider>
+</ContainerContext.Provider>;
+
+ReactDOM.render(rootComponent, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
