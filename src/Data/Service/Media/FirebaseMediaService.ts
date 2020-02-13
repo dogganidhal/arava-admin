@@ -9,7 +9,17 @@ export default class FirebaseMediaService extends MediaService {
 
 	private storageRef = firebase.storage().ref("media");
 
-	public async upload(file: File): Promise<MediaWriteRequest> {
+	public upload(file: File): Promise<MediaWriteRequest>;
+	public upload(files: File[]): Promise<MediaWriteRequest[]>;
+	public upload(file: File | File[]): Promise<MediaWriteRequest> | Promise<MediaWriteRequest[]> {
+		if (file instanceof File) {
+			return this.uploadSingle(file);
+		} else {
+			return Promise.all(file.map(singleFile => this.uploadSingle(singleFile)));
+		}
+	}
+
+	private async uploadSingle(file: File): Promise<MediaWriteRequest> {
 		return new Promise(((resolve, reject) => {
 			this.storageRef.put(file)
 				.then(async snapshot => {

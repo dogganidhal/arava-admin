@@ -1,17 +1,16 @@
-import React, {ChangeEvent, useCallback, useEffect, useState} from "react";
+import React, {ChangeEvent, useCallback, useState} from "react";
 import LocalizedResourceField from "./LocalizedResourceField";
 import {
-	Button, createStyles, Divider,
+	Box, Button, createStyles, Divider,
 	FormControlLabel, FormGroup,
-	Grid, Switch, TextField,
-	Typography
+	Grid, GridList, GridListTile, Switch, TextField, Typography
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import useIslandListService from "../Hooks/UseIslandListService";
-import useCategoryListService from "../Hooks/UseCategoryListService";
+import useThemeListService from "../Hooks/UseThemeListService";
 import {Alert, Autocomplete} from "@material-ui/lab";
 import AddIcon from "@material-ui/icons/Add";
-import PoiCategory from "../Data/Model/PoiCategory";
+import PoiTheme from "../Data/Model/PoiTheme";
 import Island from "../Data/Model/Island";
 import LocalizedResource from "../Data/Model/LocalizedResource";
 import CreatePoiDetailsForm from "./CreatePoiDetailsForm";
@@ -20,6 +19,8 @@ import useIoC from "../Hooks/UseIoC";
 import PoiService from "../Data/Service/Poi/PoiService";
 import PoiWriteRequest from "../Data/Model/PoiWriteRequest";
 import {useHistory} from "react-router-dom";
+import MediaService from "../Data/Service/Media/MediaService";
+import PoiDetailsWriteRequest from "../Data/Model/PoiDetailsWriteRequest";
 
 const useStyles = makeStyles(theme => createStyles({
 	divider: {
@@ -32,6 +33,10 @@ const useStyles = makeStyles(theme => createStyles({
 	},
 	shrinkFormControl: {
 		marginTop: theme.spacing(2)
+	},
+	gridListContainer: {
+		marginTop: theme.spacing(2),
+		marginBottom: theme.spacing(2)
 	}
 }));
 
@@ -44,40 +49,49 @@ export default function CreatePoiForm() {
 	const [latitude, setLatitude] = useState();
 	const [longitude, setLongitude] = useState();
 	const [island, setIsland] = useState();
-	const [category, setCategory] = useState();
-	const [details, setDetails] = useState();
+	const [theme, setTheme] = useState();
+	const [details, setDetails] = useState<PoiDetailsWriteRequest>({});
+	const [files, setFiles] = useState([] as File[]);
+	const [imageUrls, setImageUrls] = useState([] as string[]);
 
 	const [islandsLoading, islandsException, islands] = useIslandListService();
-	const [categoriesLoading, categoriesException, categories] = useCategoryListService();
+	const [themesLoading, themesException, themes] = useThemeListService();
 
 	const [loading, setLoading] = useState(false);
 	const [exception, setException] = useState();
 	const poiService = useIoC(PoiService);
+	const mediaService = useIoC(MediaService);
 	const navigation = useHistory();
 
-	const currentException = [islandsException, categoriesException, exception]
+	const currentException = [islandsException, themesException, exception]
 		.find(exception => exception);
 
-	const createPoi = useCallback(() => {
+	const createPoi = useCallback(async () => {
 		setLoading(true);
+		const medias = await mediaService.upload(files);
 		const request: PoiWriteRequest = {
 			title,
 			description,
 			latitude,
 			longitude,
-			categoryId: category.id,
+			themeId: theme.id,
+			thingsToDo,
+			sponsored: premium,
 			details,
-			medias: [
-
-			],
+			medias: medias,
 			islandId: island.id,
-
 		};
 		poiService.createPoi(request)
 			.then(() => navigation.push("/pois"))
 			.catch(exception => setException(exception))
 			.finally(() => setLoading(false));
-	}, []);
+	}, [
+		title, details, description,
+		latitude, longitude, theme,
+		thingsToDo, premium, files,
+		island, setException, setLoading,
+		loading, exception
+	]);
 
 	const extractFrenchLocalizedString = (localizedResource: LocalizedResource) => {
 		const localizedString = localizedResource
@@ -87,7 +101,7 @@ export default function CreatePoiForm() {
 
 	return <div>
 		{
-			currentException && <Alert>
+			currentException && <Alert severity={"error"}>
 				{currentException.message}
 			</Alert>
 		}
@@ -121,23 +135,23 @@ export default function CreatePoiForm() {
 			<FormGroup row>
 				<Autocomplete
 					className={classes.formControl}
-					options={categories}
+					options={themes}
 					getOptionLabel={category => extractFrenchLocalizedString(category.name)}
-					value={category}
-					onChange={(_: ChangeEvent<{}>, category: PoiCategory | null) => {
+					value={theme}
+					onChange={(_: ChangeEvent<{}>, category: PoiTheme | null) => {
 						if (category) {
-							setCategory(category);
+							setTheme(category);
 						}
 					}}
 					renderInput={params => (
-						<TextField {...params} label="Catégorie" variant="filled" fullWidth />
+						<TextField {...params} label="Thème" variant="filled" fullWidth />
 					)}/>
 				<Button
 					color={"primary"}
 					size={"large"}
 					className={classes.shrinkFormControl}>
 					<AddIcon />
-					Créer une catégorie
+					Créer un thème
 				</Button>
 			</FormGroup>
 			<FormGroup row className={classes.formControl}>
@@ -192,6 +206,38 @@ export default function CreatePoiForm() {
 						setLongitude(coordinate.longitude);
 					}}/>
 			</div>
+			<Divider className={classes.divider} />
+			<Typography color={"textSecondary"}>
+				Photos / Vidéos
+			</Typography>
+			<div className={classes.gridListContainer}>
+				<GridList cols={2}>
+					{
+						imageUrls.map((url, index) => (
+							<GridListTile key={index}>
+								<Box borderRadius={4}>
+									<img src={url} />
+								</Box>
+							</GridListTile>
+						))
+					}
+				</GridList>
+			</div>
+			<Button disableElevation color={"primary"} variant={"contained"} component={"label"} fullWidth>
+				Nouveau
+				<input
+					type="file"
+					style={{ display: "none" }}
+					onChange={e => {
+						if (e.target.files && e.target.files.length > 0) {
+							const file = e.target.files.item(0);
+							if (file) {
+								setFiles([...files, file]);
+								setImageUrls([...imageUrls, URL.createObjectURL(file)]);
+							}
+						}
+					}}/>
+			</Button>
 			<Divider className={classes.divider} />
 			<CreatePoiDetailsForm
 				value={details}

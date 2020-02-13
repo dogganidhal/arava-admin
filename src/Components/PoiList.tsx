@@ -57,8 +57,8 @@ export default function PoiList() {
 		</Fab>
 		{
 			pois.map((poi, index) => (
-				<Grid item>
-					<PoiCard key={index} poi={poi} />
+				<Grid item key={index}>
+					<PoiCard poi={poi} />
 				</Grid>
 			))
 		}

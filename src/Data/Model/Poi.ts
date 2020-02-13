@@ -1,7 +1,7 @@
 import LatLng from "./LatLng";
 import LocalizedResource from "./LocalizedResource";
 import Media from "./Media";
-import PoiCategory from "./PoiCategory";
+import PoiTheme from "./PoiTheme";
 import Ratings from "./Ratings";
 import PoiDetails from "./PoiDetails";
 
@@ -17,7 +17,7 @@ export default interface Poi {
 	readonly featured: boolean;
 	readonly thingsToDo: boolean;
 	readonly medias: Media[];
-	readonly category: PoiCategory;
+	readonly theme: PoiTheme;
 	readonly comments: Comment[];
 	readonly ratings: Ratings;
 }

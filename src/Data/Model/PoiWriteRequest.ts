@@ -1,14 +1,14 @@
-import LocalizedResource from "./LocalizedResource";
 import PoiDetailsWriteRequest from "./PoiDetailsWriteRequest";
 import MediaWriteRequest from "./MediaWriteRequest";
+import LocalizedResourceWriteRequest from "./LocalizedResourceWriteRequest";
 
 
 export default interface PoiWriteRequest {
 	readonly id?: string;
-	readonly title: LocalizedResource;
-	readonly description: LocalizedResource;
+	readonly title: LocalizedResourceWriteRequest;
+	readonly description: LocalizedResourceWriteRequest;
 	readonly islandId: string;
-	readonly categoryId: string;
+	readonly themeId: string;
 	readonly sponsored?: boolean;
 	readonly featured?: boolean;
 	readonly thingsToDo?: boolean;

@@ -1,14 +1,13 @@
 import AbstractAxiosService from "../AbstractAxiosService";
 import PoiService from "./PoiService";
 import PoiWriteRequest from "../../Model/PoiWriteRequest";
-import PoiCategoryWriteRequest from "../../Model/PoiCategoryWriteRequest";
-import PoiTypeWriteRequest from "../../Model/PoiTypeWriteRequest";
+import PoiThemeWriteRequest from "../../Model/PoiThemeWriteRequest";
 import {injectable} from "inversify";
 import Poi from "../../Model/Poi";
 import Island from "../../Model/Island";
 import IslandUpdateRequest from "../../Model/IslandUpdateRequest";
 import Archipelago from "../../Model/Archipelago";
-import PoiCategory from "../../Model/PoiCategory";
+import PoiTheme from "../../Model/PoiTheme";
 
 
 @injectable()
@@ -18,12 +17,8 @@ export default class AxiosPoiService extends AbstractAxiosService implements Poi
 		return this.post("/poi", request);
 	}
 
-	public async createPoiCategory(request: PoiCategoryWriteRequest): Promise<void> {
-		return this.post("/poi/category", request);
-	}
-
-	public async createPoiType(request: PoiTypeWriteRequest): Promise<void> {
-		return this.post("/poi/type", request);
+	public async createPoiTheme(request: PoiThemeWriteRequest): Promise<void> {
+		return this.post("/poi/theme", request);
 	}
 
 	public async listPois(): Promise<Poi[]> {
@@ -38,8 +33,8 @@ export default class AxiosPoiService extends AbstractAxiosService implements Poi
 		return this.get("/archipelago");
 	}
 
-	public async listCategories(): Promise<PoiCategory[]> {
-		return this.get("/poi/category");
+	public async listThemes(): Promise<PoiTheme[]> {
+		return this.get("/poi/theme");
 	}
 
 	public async getIsland(id: string): Promise<Island> {

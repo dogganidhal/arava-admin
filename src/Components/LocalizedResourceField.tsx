@@ -1,8 +1,9 @@
-import LocalizedResource from "../Data/Model/LocalizedResource";
 import {createStyles, Grid, TextField, Typography} from "@material-ui/core";
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import Language from "../Data/Model/Language";
+import LocalizedResourceWriteRequest from "../Data/Model/LocalizedResourceWriteRequest";
+import {lang} from "moment";
 
 
 const useStyles = makeStyles(theme => createStyles({
@@ -16,9 +17,9 @@ const useStyles = makeStyles(theme => createStyles({
 
 interface LocalizedResourceFieldProps {
 	readonly label?: string;
-	readonly value?: LocalizedResource;
+	readonly value?: LocalizedResourceWriteRequest;
 	readonly multiline?: boolean;
-	onChanged?(localizedResource: LocalizedResource): void;
+	onChanged?(localizedResource: LocalizedResourceWriteRequest): void;
 }
 
 const languages: Language[] = [
@@ -40,13 +41,6 @@ export default function LocalizedResourceField(props: LocalizedResourceFieldProp
 	const classes = useStyles();
 	const { label, value, multiline, onChanged } = props;
 
-	function valueForLanguage(language: Language): string | undefined {
-		const localizedString = value ?
-			value.find(localizedString => localizedString.language.code === language.code) :
-			undefined;
-		return localizedString ? localizedString.resource : undefined;
-	}
-
 	return <div className={classes.formControl}>
 		{
 			label && <Typography color={"textSecondary"}>
@@ -61,19 +55,14 @@ export default function LocalizedResourceField(props: LocalizedResourceFieldProp
 							fullWidth
 							multiline={multiline}
 							label={language.name}
-							value={valueForLanguage(language)}
+							value={value && value[language.code]}
 							variant={"filled"}
 							onChange={e => {
 								if (onChanged) {
-									const oldValue = (value || [])
-										.filter(localizedString => localizedString.language.code !== language.code);
-									onChanged([
-										...oldValue,
-										{
-											language: language,
-											resource: e.target.value
-										}
-									]);
+									onChanged({
+										...value,
+										[language.code]: e.target.value
+									});
 								}
 							}}/>
 					</Grid>

@@ -1,23 +1,21 @@
 import PoiWriteRequest from "../../Model/PoiWriteRequest";
-import PoiCategoryWriteRequest from "../../Model/PoiCategoryWriteRequest";
-import PoiTypeWriteRequest from "../../Model/PoiTypeWriteRequest";
+import PoiThemeWriteRequest from "../../Model/PoiThemeWriteRequest";
 import Poi from "../../Model/Poi";
 import Island from "../../Model/Island";
 import IslandUpdateRequest from "../../Model/IslandUpdateRequest";
 import Archipelago from "../../Model/Archipelago";
-import PoiCategory from "../../Model/PoiCategory";
+import PoiTheme from "../../Model/PoiTheme";
 
 
 export default abstract class PoiService {
 
 	abstract createPoi(request: PoiWriteRequest): Promise<void>;
-	abstract createPoiCategory(request: PoiCategoryWriteRequest): Promise<void>;
-	abstract createPoiType(request: PoiTypeWriteRequest): Promise<void>;
+	abstract createPoiTheme(request: PoiThemeWriteRequest): Promise<void>;
 
 	abstract listPois(): Promise<Poi[]>;
 	abstract listIslands(): Promise<Island[]>;
 	abstract listArchipelagos(): Promise<Archipelago[]>;
-	abstract listCategories(): Promise<PoiCategory[]>;
+	abstract listThemes(): Promise<PoiTheme[]>;
 
 	abstract getIsland(id: string): Promise<Island>;
 

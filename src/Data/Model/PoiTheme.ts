@@ -1,11 +1,11 @@
 import LocalizedResource from "./LocalizedResource";
 import Media from "./Media";
-import PoiType from "./PoiType";
 
 
-export default interface PoiCategory {
+export default interface PoiTheme {
 	readonly id: string;
 	readonly name: LocalizedResource;
 	readonly icon: Media;
-	readonly type: PoiType;
+	readonly parent?: PoiTheme;
+	readonly subThemes?: PoiTheme[];
 }
