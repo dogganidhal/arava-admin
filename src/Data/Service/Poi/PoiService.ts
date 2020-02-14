@@ -17,8 +17,10 @@ export default abstract class PoiService {
 	abstract listArchipelagos(): Promise<Archipelago[]>;
 	abstract listThemes(): Promise<PoiTheme[]>;
 
+	abstract getPoi(id: string): Promise<Poi>;
 	abstract getIsland(id: string): Promise<Island>;
 
+	abstract updatePoi(request: PoiWriteRequest): Promise<void>;
 	abstract updateIsland(request: IslandUpdateRequest): Promise<void>;
 
 }

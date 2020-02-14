@@ -37,8 +37,16 @@ export default class AxiosPoiService extends AbstractAxiosService implements Poi
 		return this.get("/poi/theme");
 	}
 
+	public async getPoi(id: string): Promise<Poi> {
+		return this.get(`/poi/${id}`);
+	}
+
 	public async getIsland(id: string): Promise<Island> {
 		return this.get(`/island/${id}`);
+	}
+
+	public async updatePoi(request: PoiWriteRequest): Promise<void> {
+		return this.put("/poi", request);
 	}
 
 	public async updateIsland(request: IslandUpdateRequest): Promise<void> {

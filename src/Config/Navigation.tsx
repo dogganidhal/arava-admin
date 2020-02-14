@@ -8,6 +8,7 @@ import IslandList from "../Components/IslandList";
 import UserList from "../Components/UserList";
 import EditIsland from "../Components/EditIsland";
 import CreatePoi from "../Components/CreatePoi";
+import EditPoi from "../Components/EditPoi";
 
 interface IRouteConfig {
 	readonly path: string;
@@ -64,8 +65,13 @@ const NavigationConfig: INavigationConfig = {
 		},
 		{
 			path: '/pois/create',
-			component: <CreatePoi />
-		}
+			component: <CreatePoi />,
+			exact: true
+		},
+		{
+			path: '/pois/:poiId',
+			component: <EditPoi />
+		},
 	]
 };
 

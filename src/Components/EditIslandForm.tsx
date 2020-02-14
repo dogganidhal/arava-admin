@@ -1,9 +1,8 @@
 import Island from "../Data/Model/Island";
 import React, {ChangeEvent, useCallback, useState} from "react";
 import {
-	Button, Card, CardActions, CardMedia, CircularProgress,
-	createStyles, FormControl, Grid, InputLabel,
-	MenuItem, Select, Snackbar, TextField, Theme, Typography
+	Button, Card, CardActions, CardMedia,
+	createStyles, Grid, Snackbar, TextField, Theme
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import {makeStyles} from "@material-ui/core/styles";
@@ -15,6 +14,7 @@ import MediaService from "../Data/Service/Media/MediaService";
 import MediaWriteRequest from "../Data/Model/MediaWriteRequest";
 import {Autocomplete} from "@material-ui/lab";
 import Archipelago from "../Data/Model/Archipelago";
+import Map from "./Map";
 
 const useStyles = makeStyles((theme: Theme) => {
 	return createStyles({
@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme: Theme) => {
 			marginTop: theme.spacing(2)
 		},
 		imageCard: {
-			width: theme.spacing(96),
 			marginTop: theme.spacing(2)
 		},
 		image: {
@@ -143,6 +142,15 @@ export default function EditIslandForm({island}: EditIslandFormProps) {
 						onChange={e => setZoom(e.target.value as unknown as number)}/>
 				</Grid>
 			</Grid>
+			<div className={classes.formControl}>
+				<Map
+					initialCoordinate={island.center}
+					initialZoom={island.zoom}
+					onUserInteraction={(coordinate, zoom) => {
+						setCoordinate(coordinate);
+						setZoom(zoom);
+					}}/>
+			</div>
 			<Card variant={"outlined"} className={classes.imageCard}>
 				<CardMedia
 					className={classes.image}

@@ -4,6 +4,7 @@ import Media from "./Media";
 import PoiTheme from "./PoiTheme";
 import Ratings from "./Ratings";
 import PoiDetails from "./PoiDetails";
+import Island from "./Island";
 
 
 export default interface Poi {
@@ -12,7 +13,7 @@ export default interface Poi {
 	readonly description: LocalizedResource;
 	readonly details: PoiDetails;
 	readonly coordinate: LatLng;
-	readonly island: string;
+	readonly island: Island;
 	readonly sponsored: boolean;
 	readonly featured: boolean;
 	readonly thingsToDo: boolean;

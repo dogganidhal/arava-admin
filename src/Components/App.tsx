@@ -1,6 +1,6 @@
 import React, {useContext, useEffect} from 'react';
 import {createMuiTheme, ThemeProvider} from "@material-ui/core";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Nav from "./Nav";
 import NavigationConfig from "../Config/Navigation";
 import useAuth from "../Hooks/UseAuth";
@@ -46,13 +46,15 @@ export default function App() {
       authenticated ?
         <BrowserRouter>
           <Nav>
-            {
-              NavigationConfig.routes.map((route, index) => (
-                <Route key={index} path={route.path} exact={route.exact}>
-                  {route.component}
-                </Route>
-              ))
-            }
+            <Switch>
+              {
+                NavigationConfig.routes.map((route, index) => (
+                  <Route key={index} path={route.path} exact={route.exact}>
+                    {route.component}
+                  </Route>
+                ))
+              }
+            </Switch>
           </Nav>
         </BrowserRouter> :
         <Login />

@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from "react";
-import {createStyles, makeStyles, useTheme, withTheme} from "@material-ui/core/styles";
-import {GoogleApiWrapper, Map, MapProps, Marker} from "google-maps-react";
+import {createStyles, makeStyles, useTheme} from "@material-ui/core/styles";
+import {GoogleApiWrapper, Map, MapProps} from "google-maps-react";
 import {Card} from "@material-ui/core";
 import LatLng from "../Data/Model/LatLng";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -17,13 +17,15 @@ const useStyles = makeStyles(theme => {
 });
 
 interface MapContainerProps extends MapProps {
+	readonly initialCoordinate?: LatLng;
+	readonly initialZoom?: number;
 	readonly alwaysCenterMarker?: boolean;
 	onUserInteraction?(coordinate: LatLng, zoom: number): void;
 }
 
 function MapContainer(props: MapContainerProps) {
 	const classes = useStyles();
-	const { onUserInteraction, google, alwaysCenterMarker } = props;
+	const { onUserInteraction, google, alwaysCenterMarker, initialZoom, initialCoordinate } = props;
 	const theme = useTheme();
 
 	const handleUserInteraction = useCallback(async (map?: google.maps.Map) => {
@@ -43,12 +45,16 @@ function MapContainer(props: MapContainerProps) {
 			className={classes.container}>
 			<Map
 				{...props}
-				// Tahiti coordinate
-				initialCenter={{
-					lat: -17.688706137901743,
-					lng: -149.3549765692033
-				}}
-				zoom={11}
+					initialCenter={initialCoordinate ? {
+						lat: initialCoordinate.latitude,
+						lng: initialCoordinate.longitude
+					} :
+					{ // Tahiti coordinate
+						lat: -17.688706137901743,
+						lng: -149.3549765692033
+					}
+				}
+				zoom={initialZoom || 11}
 				google={google}
 				// @ts-ignore
 				style={{
