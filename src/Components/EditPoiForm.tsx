@@ -25,6 +25,8 @@ import CreatePoiDetailsForm from "./CreatePoiDetailsForm";
 import {makeStyles} from "@material-ui/core/styles";
 import LocalizedResourceMapper from "../Data/Mapper/LocalizedResourceMapper";
 import PoiDetailsMapper from "../Data/Mapper/PoiDetailsMapper";
+import PoiImagePicker from "./PoiImagePicker";
+import PreparedMedia from "../Data/Model/PreparedMedia";
 
 const useStyles = makeStyles(theme => createStyles({
 	divider: {
@@ -62,8 +64,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 	const [island, setIsland] = useState(poi.island);
 	const [theme, setTheme] = useState(poi.theme);
 	const [details, setDetails] = useState(poiDetailsMapper.map(poi.details));
-	const [files, setFiles] = useState([] as File[]);
-	const [imageUrls, setImageUrls] = useState(poi.medias.map(m => m.url));
+	const [medias, setMedias] = useState(poi.medias as PreparedMedia[]);
 	const [success, setSuccess] = useState(false);
 
 	const [islandsLoading, islandsException, islands] = useIslandListService();
@@ -73,14 +74,13 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 	const [exception, setException] = useState();
 	const poiService = useIoC(PoiService);
 	const mediaService = useIoC(MediaService);
-	const navigation = useHistory();
 
 	const currentException = [islandsException, themesException, exception]
 		.find(exception => exception);
 
 	const createPoi = useCallback(async () => {
 		setLoading(true);
-		const medias = await mediaService.upload(files);
+		const files = await mediaService.upload(medias);
 		const request: PoiWriteRequest = {
 			id: poi.id,
 			title,
@@ -91,7 +91,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 			thingsToDo,
 			sponsored: premium,
 			details,
-			medias: medias,
+			medias: files,
 			islandId: island.id,
 		};
 		poiService.updatePoi(request)
@@ -101,7 +101,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 	}, [
 		title, details, description,
 		latitude, longitude, theme,
-		thingsToDo, premium, files,
+		thingsToDo, premium, medias,
 		island, setException, setLoading,
 		loading, exception, poi
 	]);
@@ -239,50 +239,13 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 					}}/>
 			</div>
 			<Divider className={classes.divider} />
-			<Typography color={"textSecondary"}>
-				Photos / Vidéos
-			</Typography>
-			<div className={classes.gridListContainer}>
-				<GridList cols={2}>
-					{
-						imageUrls.map((url, index) => (
-							<GridListTile key={index}>
-								<Box borderRadius={4}>
-									<img src={url} />
-								</Box>
-							</GridListTile>
-						))
-					}
-				</GridList>
-			</div>
-			<Button
-				fullWidth
-				disableElevation
-				color={"primary"}
-				variant={"contained"}
-				component={"label"}>
-				Ajouter
-				<input
-					type="file"
-					style={{ display: "none" }}
-					onChange={e => {
-						if (e.target.files && e.target.files.length > 0) {
-							const file = e.target.files.item(0);
-							if (file) {
-								setFiles([...files, file]);
-								setImageUrls([...imageUrls, URL.createObjectURL(file)]);
-							}
-						}
-					}}/>
-			</Button>
+			<PoiImagePicker
+				onChanged={medias => setMedias(medias)}
+				images={medias}/>
 			<Divider className={classes.divider} />
 			<CreatePoiDetailsForm
 				value={details}
-				onChanged={details => {
-					console.log("New details : ");
-					console.log(details);
-					setDetails(details);
-				}}/>
+				onChanged={details => setDetails(details)}/>
 			<Button
 				fullWidth
 				disableElevation

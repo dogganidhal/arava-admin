@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useCallback, useState} from "react";
+import React, {ChangeEvent, useCallback, useEffect, useState} from "react";
 import LocalizedResourceField from "./LocalizedResourceField";
 import {
 	Box, Button, createStyles, Divider,
@@ -21,6 +21,10 @@ import PoiWriteRequest from "../Data/Model/PoiWriteRequest";
 import {useHistory} from "react-router-dom";
 import MediaService from "../Data/Service/Media/MediaService";
 import PoiDetailsWriteRequest from "../Data/Model/PoiDetailsWriteRequest";
+import PreparedMedia from "../Data/Model/PreparedMedia";
+import PoiImagePicker from "./PoiImagePicker";
+import {useForm} from "react-hook-form";
+import LocalizedResourceWriteRequest from "../Data/Model/LocalizedResourceWriteRequest";
 
 const useStyles = makeStyles(theme => createStyles({
 	divider: {
@@ -51,8 +55,7 @@ export default function CreatePoiForm() {
 	const [island, setIsland] = useState();
 	const [theme, setTheme] = useState();
 	const [details, setDetails] = useState<PoiDetailsWriteRequest>({});
-	const [files, setFiles] = useState([] as File[]);
-	const [imageUrls, setImageUrls] = useState([] as string[]);
+	const [medias, setMedias] = useState([] as PreparedMedia[]);
 
 	const [islandsLoading, islandsException, islands] = useIslandListService();
 	const [themesLoading, themesException, themes] = useThemeListService();
@@ -62,13 +65,32 @@ export default function CreatePoiForm() {
 	const poiService = useIoC(PoiService);
 	const mediaService = useIoC(MediaService);
 	const navigation = useHistory();
+	// TODO: Validate form with useForm
+	// const { register, setValue, handleSubmit, errors } = useForm();
+
+	const [valid, setValid] = useState(false);
+
+	const localizedResourceValid = (resource: LocalizedResourceWriteRequest) => {
+		return Object.keys(resource).includes('fr') && resource['fr'].length > 0 &&
+			Object.keys(resource).includes('en') && resource['en'].length > 0 &&
+			Object.keys(resource).includes('zh_Hans') && resource['zh_Hans'].length > 0
+	};
+
+	useEffect(() => {
+		setValid(
+			theme !== undefined &&
+			island !== undefined &&
+			localizedResourceValid(title) &&
+			localizedResourceValid(description)
+		);
+	}, [theme, island, title, description]);
 
 	const currentException = [islandsException, themesException, exception]
 		.find(exception => exception);
 
 	const createPoi = useCallback(async () => {
 		setLoading(true);
-		const medias = await mediaService.upload(files);
+		const files = await mediaService.upload(medias);
 		const request: PoiWriteRequest = {
 			title,
 			description,
@@ -78,7 +100,7 @@ export default function CreatePoiForm() {
 			thingsToDo,
 			sponsored: premium,
 			details,
-			medias: medias,
+			medias: files,
 			islandId: island.id,
 		};
 		poiService.createPoi(request)
@@ -88,7 +110,7 @@ export default function CreatePoiForm() {
 	}, [
 		title, details, description,
 		latitude, longitude, theme,
-		thingsToDo, premium, files,
+		thingsToDo, premium, medias,
 		island, setException, setLoading,
 		loading, exception
 	]);
@@ -105,15 +127,17 @@ export default function CreatePoiForm() {
 				{currentException.message}
 			</Alert>
 		}
-		<form>
+		<form onSubmit={createPoi} >
 			<LocalizedResourceField
 				label={"Nom"}
 				value={title}
+				required
 				onChanged={resource => {
 					setName(resource);
 				}}/>
 			<LocalizedResourceField
 				multiline
+				required
 				label={"Description"}
 				value={description}
 				onChanged={resource => {
@@ -207,37 +231,9 @@ export default function CreatePoiForm() {
 					}}/>
 			</div>
 			<Divider className={classes.divider} />
-			<Typography color={"textSecondary"}>
-				Photos / Vidéos
-			</Typography>
-			<div className={classes.gridListContainer}>
-				<GridList cols={2}>
-					{
-						imageUrls.map((url, index) => (
-							<GridListTile key={index}>
-								<Box borderRadius={4}>
-									<img src={url} />
-								</Box>
-							</GridListTile>
-						))
-					}
-				</GridList>
-			</div>
-			<Button disableElevation color={"primary"} variant={"contained"} component={"label"} fullWidth>
-				Nouveau
-				<input
-					type="file"
-					style={{ display: "none" }}
-					onChange={e => {
-						if (e.target.files && e.target.files.length > 0) {
-							const file = e.target.files.item(0);
-							if (file) {
-								setFiles([...files, file]);
-								setImageUrls([...imageUrls, URL.createObjectURL(file)]);
-							}
-						}
-					}}/>
-			</Button>
+			<PoiImagePicker
+				onChanged={medias => setMedias(medias)}
+				images={medias}/>
 			<Divider className={classes.divider} />
 			<CreatePoiDetailsForm
 				value={details}
@@ -245,6 +241,8 @@ export default function CreatePoiForm() {
 			<Button
 				fullWidth
 				disableElevation
+				disabled={!valid}
+				type={"submit"}
 				className={classes.formControl}
 				variant={"contained"}
 				color={"primary"}

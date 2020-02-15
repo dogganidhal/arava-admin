@@ -57,7 +57,9 @@ export default function EditIslandForm({island}: EditIslandFormProps) {
 		let image: MediaWriteRequest = island.image;
 		if (imageFile) {
 			try {
-				image = await mediaManager.upload(imageFile);
+				image = await mediaManager.upload({
+					file: imageFile
+				});
 			} catch (exception) {
 				setException(exception);
 				setLoading(false);

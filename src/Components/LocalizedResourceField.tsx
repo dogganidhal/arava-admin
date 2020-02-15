@@ -19,6 +19,7 @@ interface LocalizedResourceFieldProps {
 	readonly label?: string;
 	readonly value?: LocalizedResourceWriteRequest;
 	readonly multiline?: boolean;
+	readonly required?: boolean;
 	onChanged?(localizedResource: LocalizedResourceWriteRequest): void;
 }
 
@@ -39,7 +40,7 @@ const languages: Language[] = [
 
 export default function LocalizedResourceField(props: LocalizedResourceFieldProps) {
 	const classes = useStyles();
-	const { label, value, multiline, onChanged } = props;
+	const { label, value, multiline, required, onChanged } = props;
 
 	return <div className={classes.formControl}>
 		{
@@ -53,6 +54,7 @@ export default function LocalizedResourceField(props: LocalizedResourceFieldProp
 					<Grid key={index} item xs={4}>
 						<TextField
 							fullWidth
+							required={required}
 							multiline={multiline}
 							label={language.name}
 							value={value && value[language.code]}
