@@ -13,6 +13,8 @@ import AddIcon from '@material-ui/icons/Search';
 import SearchIcon from '@material-ui/icons/Add';
 import {useHistory} from "react-router-dom";
 import usePoiFilter from "../Hooks/UsePoiFilter";
+import CheckIcon from "@material-ui/icons/Check";
+import CancelIcon from "@material-ui/icons/Close";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -91,10 +93,12 @@ export default function PoiList() {
 				<TableHead>
 					<TableRow>
 						<TableCell>Titre</TableCell>
-						<TableCell align="right">Thème</TableCell>
-						<TableCell align="right">Île</TableCell>
-						<TableCell align="right">Coordonnées</TableCell>
-						<TableCell align="right">Actions</TableCell>
+						<TableCell align="center">Thème</TableCell>
+						<TableCell align="center">Île</TableCell>
+						<TableCell align="center">Premium</TableCell>
+						<TableCell align="center">Choses à faire</TableCell>
+						<TableCell align="center">Mis en avant</TableCell>
+						<TableCell align="center">Actions</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -103,10 +107,24 @@ export default function PoiList() {
 							<TableCell component="th" scope="row">
 								{poi.title.find(t => t.language.code === 'fr')?.resource}
 							</TableCell>
-							<TableCell align="right">{poi.theme.name.find(t => t.language.code === 'fr')?.resource}</TableCell>
-							<TableCell align="right">{poi.island.name}</TableCell>
-							<TableCell align="right">{`(${poi.coordinate.latitude}, ${poi.coordinate.longitude})`}</TableCell>
-							<TableCell align="right">
+							<TableCell align="center">{poi.theme.name.find(t => t.language.code === 'fr')?.resource}</TableCell>
+							<TableCell align="center">{poi.island.name}</TableCell>
+							<TableCell align="center">
+								{
+									poi.sponsored ? <CheckIcon /> : <CancelIcon />
+								}
+							</TableCell>
+							<TableCell align="center">
+								{
+									poi.thingsToDo ? <CheckIcon /> : <CancelIcon />
+								}
+							</TableCell>
+							<TableCell align="center">
+								{
+									poi.featured ? <CheckIcon /> : <CancelIcon />
+								}
+							</TableCell>
+							<TableCell align="center">
 								<Button
 									color={"primary"}
 									onClick={() => navigation.push(`/pois/${poi.id}`)}>

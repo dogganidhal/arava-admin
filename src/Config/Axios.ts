@@ -18,6 +18,6 @@ export default function configureAxios() {
 	});
 	if (process.env.NODE_ENV === "development") {
 		Axios.interceptors.request.use(AxiosLogger.requestLogger);
-		// Axios.interceptors.response.use(AxiosLogger.responseLogger);
+		Axios.interceptors.response.use(AxiosLogger.responseLogger);
 	}
 }

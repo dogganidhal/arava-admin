@@ -14,34 +14,29 @@ export default class FirebaseMediaService extends MediaService {
 	public upload(media: PreparedMedia[]): Promise<MediaWriteRequest[]>;
 	public upload(media: PreparedMedia | PreparedMedia[]): Promise<MediaWriteRequest> | Promise<MediaWriteRequest[]> {
 
-		const handleSingleMedia = (media: PreparedMedia) => {
-			if ("url" in media) {
-				return Promise.resolve(media);
-			} else {
-				return this.uploadSingle(media.file);
-			}
-		};
-
 		if (media instanceof Array) {
-			return Promise.all(media.map(handleSingleMedia));
+			return Promise.all(media.map(this.handleSingleMedia.bind(this)));
 		} else {
-			return handleSingleMedia(media);
+			return this.handleSingleMedia(media);
 		}
 
 	}
 
 	private async uploadSingle(file: File): Promise<MediaWriteRequest> {
-		return new Promise(((resolve, reject) => {
-			this.storageRef.put(file)
-				.then(async snapshot => {
-					const url = await snapshot.ref.getDownloadURL();
-					resolve({
-						url,
-						type: file.type
-					});
-				})
-				.catch((e) => reject(e));
-		}));
+		const snapshot = await this.storageRef.put(file);
+		const url = await snapshot.ref.getDownloadURL();
+		return {
+			url,
+			type: file.type
+		};
+	}
+
+	private async handleSingleMedia(media: PreparedMedia): Promise<MediaWriteRequest> {
+		if ("url" in media) {
+			return Promise.resolve(media);
+		} else {
+			return this.uploadSingle(media.file);
+		}
 	}
 
 }

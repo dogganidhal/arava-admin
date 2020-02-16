@@ -12,10 +12,10 @@ import {Alert, Autocomplete} from "@material-ui/lab";
 import LocalizedResourceField from "./LocalizedResourceField";
 import Island from "../Data/Model/Island";
 import {
-	Box, Button, createStyles,
+	Button, createStyles, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
 	Divider, FormControlLabel,
 	FormGroup, Grid,
-	GridList, GridListTile, Snackbar, Switch,
+	Snackbar, Switch,
 	TextField, Typography
 } from "@material-ui/core";
 import PoiTheme from "../Data/Model/PoiTheme";
@@ -43,6 +43,12 @@ const useStyles = makeStyles(theme => createStyles({
 	gridListContainer: {
 		marginTop: theme.spacing(2),
 		marginBottom: theme.spacing(2)
+	},
+	deleteButton: {
+		flex: 1,
+		marginTop: theme.spacing(2),
+		backgroundColor: theme.palette.error.main,
+		color: theme.palette.background.default
 	}
 }));
 
@@ -57,7 +63,8 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 
 	const [title, setName] = useState(localizedResourceMapper.map(poi.title));
 	const [description, setDescription] = useState(localizedResourceMapper.map(poi.description));
-	const [premium, setPremium] = useState(poi.featured);
+	const [sponsored, setSponsored] = useState(poi.sponsored);
+	const [featured, setFeatured] = useState(poi.featured);
 	const [thingsToDo, setThingsToDo] = useState(poi.thingsToDo);
 	const [latitude, setLatitude] = useState(poi.coordinate.latitude);
 	const [longitude, setLongitude] = useState(poi.coordinate.longitude);
@@ -72,8 +79,12 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 
 	const [loading, setLoading] = useState(false);
 	const [exception, setException] = useState();
+
+	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
 	const poiService = useIoC(PoiService);
 	const mediaService = useIoC(MediaService);
+	const navigation = useHistory();
 
 	const currentException = [islandsException, themesException, exception]
 		.find(exception => exception);
@@ -89,7 +100,8 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 			longitude,
 			themeId: theme.id,
 			thingsToDo,
-			sponsored: premium,
+			sponsored,
+			featured,
 			details,
 			medias: files,
 			islandId: island.id,
@@ -101,16 +113,26 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 	}, [
 		title, details, description,
 		latitude, longitude, theme,
-		thingsToDo, premium, medias,
+		thingsToDo, sponsored, medias,
 		island, setException, setLoading,
-		loading, exception, poi
+		loading, exception, poi, featured
 	]);
 
-	function extractFrenchLocalizedString(localizedResource: LocalizedResource) {
+	const toggleDeleteDialog = () => setDeleteDialogOpen(!deleteDialogOpen);
+
+	const deletePoi = useCallback(async () => {
+		setLoading(true);
+		toggleDeleteDialog();
+		await poiService.deletePoi(poi.id);
+		setLoading(false);
+		navigation.push("/pois");
+	}, [poi]);
+
+	const extractFrenchLocalizedString = (localizedResource: LocalizedResource) => {
 		const localizedString = localizedResource
 			.find(localizedString => localizedString.language.code === 'fr');
 		return (localizedString && localizedString.resource) || '';
-	}
+	};
 
 	function closeSuccessSnackbar() {
 		setSuccess(false);
@@ -122,6 +144,27 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 				{currentException.message}
       </Alert>
 		}
+		<Dialog
+			open={deleteDialogOpen}
+			onClose={toggleDeleteDialog}
+			aria-labelledby="delete-dialog-title"
+			aria-describedby="delete-dialog-description"
+		>
+			<DialogTitle id="delete-dialog-title">{"Supprimer ce point d'intérêt?"}</DialogTitle>
+			<DialogContent>
+				<DialogContentText id="delete-dialog-description">
+					Veux-tu vraiment supprimer ce point d'intrérêt ? Cette action est irréversible
+				</DialogContentText>
+			</DialogContent>
+			<DialogActions>
+				<Button onClick={deletePoi}>
+					Supprimer
+				</Button>
+				<Button onClick={toggleDeleteDialog} color="primary" autoFocus>
+					Annuler
+				</Button>
+			</DialogActions>
+		</Dialog>
 		<Snackbar
 			open={success}
 			autoHideDuration={3000}
@@ -194,17 +237,27 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 							onChange={() => setThingsToDo(!thingsToDo)}
 							color="primary"/>
 					}
-					label="À ne pas rater"
+					label="Choses à faire"
 				/>
 				<FormControlLabel
 					control={
 						<Switch
-							checked={premium}
-							onChange={() => setPremium(!premium)}
+							checked={sponsored}
+							onChange={() => setSponsored(!sponsored)}
 							color="primary"
 						/>
 					}
 					label="Premium"
+				/>
+				<FormControlLabel
+					control={
+						<Switch
+							checked={featured}
+							onChange={() => setFeatured(!featured)}
+							color="primary"
+						/>
+					}
+					label="Mis en avant"
 				/>
 			</FormGroup>
 			<Divider className={classes.divider} />
@@ -233,6 +286,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 			<div className={classes.formControl}>
 				<Map
 					alwaysCenterMarker
+					initialCoordinate={poi.coordinate}
 					onUserInteraction={(coordinate) => {
 						setLatitude(coordinate.latitude);
 						setLongitude(coordinate.longitude);
@@ -258,6 +312,16 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 				{
 					loading ? "Chargement ..." : "Mettre à jour"
 				}
+			</Button>
+			<Button
+				fullWidth
+				disableElevation
+				className={classes.deleteButton}
+				variant={"contained"}
+				color={"inherit"}
+				size={"large"}
+				onClick={toggleDeleteDialog}>
+				Supprimer
 			</Button>
 		</form>
 	</div>;

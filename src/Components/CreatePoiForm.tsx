@@ -46,10 +46,11 @@ const useStyles = makeStyles(theme => createStyles({
 
 export default function CreatePoiForm() {
 	const classes = useStyles();
-	const [title, setName] = useState();
-	const [description, setDescription] = useState();
-	const [premium, setPremium] = useState(false);
+	const [title, setName] = useState({});
+	const [description, setDescription] = useState({});
+	const [sponsored, setSponsored] = useState(false);
 	const [thingsToDo, setThingsToDo] = useState(false);
+	const [featured, setFeatured] = useState(false);
 	const [latitude, setLatitude] = useState();
 	const [longitude, setLongitude] = useState();
 	const [island, setIsland] = useState();
@@ -98,7 +99,7 @@ export default function CreatePoiForm() {
 			longitude,
 			themeId: theme.id,
 			thingsToDo,
-			sponsored: premium,
+			sponsored,
 			details,
 			medias: files,
 			islandId: island.id,
@@ -110,7 +111,7 @@ export default function CreatePoiForm() {
 	}, [
 		title, details, description,
 		latitude, longitude, theme,
-		thingsToDo, premium, medias,
+		thingsToDo, sponsored, featured, medias,
 		island, setException, setLoading,
 		loading, exception
 	]);
@@ -186,17 +187,27 @@ export default function CreatePoiForm() {
 							onChange={() => setThingsToDo(!thingsToDo)}
 							color="primary"/>
 					}
-					label="À ne pas rater"
+					label="Choses à faire"
 				/>
 				<FormControlLabel
 					control={
 						<Switch
-							checked={premium}
-							onChange={() => setPremium(!premium)}
+							checked={sponsored}
+							onChange={() => setSponsored(!sponsored)}
 							color="primary"
 						/>
 					}
 					label="Premium"
+				/>
+				<FormControlLabel
+					control={
+						<Switch
+							checked={featured}
+							onChange={() => setFeatured(!featured)}
+							color="primary"
+						/>
+					}
+					label="Mis en avant"
 				/>
 			</FormGroup>
 			<Divider className={classes.divider} />

@@ -3,12 +3,13 @@ import PoiList from "../Components/PoiList";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 import {useTheme} from "@material-ui/core";
-import {faGlobeAsia, faMapMarker, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faGlobeAsia, faMapMarker, faTasks, faUser} from "@fortawesome/free-solid-svg-icons";
 import IslandList from "../Components/IslandList";
 import UserList from "../Components/UserList";
 import EditIsland from "../Components/EditIsland";
 import CreatePoi from "../Components/CreatePoi";
 import EditPoi from "../Components/EditPoi";
+import ThemeList from "../Components/ThemeList";
 
 interface IRouteConfig {
 	readonly path: string;
@@ -57,6 +58,13 @@ const NavigationConfig: INavigationConfig = {
 			title: `Utilisateurs`,
 			component: <UserList />,
 			icon: <StyledFontawesomeIcon icon={faUser} />,
+			exact: true
+		},
+		{
+			path: '/themes',
+			title: `Thèmes`,
+			component: <ThemeList />,
+			icon: <StyledFontawesomeIcon icon={faTasks} />,
 			exact: true
 		},
 		{

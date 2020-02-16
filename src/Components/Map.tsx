@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback} from "react";
 import {createStyles, makeStyles, useTheme} from "@material-ui/core/styles";
 import {GoogleApiWrapper, Map, MapProps} from "google-maps-react";
 import {Card} from "@material-ui/core";
@@ -7,7 +7,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMapMarkerAlt} from "@fortawesome/free-solid-svg-icons";
 
 
-const useStyles = makeStyles(theme => {
+const useStyles = makeStyles(() => {
 	return createStyles({
 		container: {
 			height: '50vh',

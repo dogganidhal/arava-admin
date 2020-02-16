@@ -33,4 +33,12 @@ export default abstract class AbstractAxiosService {
 		}
 	}
 
+	public async delete(uri: string): Promise<void> {
+		try {
+			await Axios.delete(uri);
+		} catch (e) {
+			throw e.response.data as ApiException;
+		}
+	}
+
 }

@@ -23,4 +23,6 @@ export default abstract class PoiService {
 	abstract updatePoi(request: PoiWriteRequest): Promise<void>;
 	abstract updateIsland(request: IslandUpdateRequest): Promise<void>;
 
+	abstract deletePoi(id: string): Promise<void>;
+
 }
