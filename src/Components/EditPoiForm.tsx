@@ -89,7 +89,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 	const currentException = [islandsException, themesException, exception]
 		.find(exception => exception);
 
-	const createPoi = useCallback(async () => {
+	const editPoi = useCallback(async () => {
 		setLoading(true);
 		const files = await mediaService.upload(medias);
 		const request: PoiWriteRequest = {
@@ -224,7 +224,8 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 				<Button
 					color={"primary"}
 					size={"large"}
-					className={classes.shrinkFormControl}>
+					className={classes.shrinkFormControl}
+					onClick={() => navigation.push("/themes/create")}>
 					<AddIcon />
 					Créer un thème
 				</Button>
@@ -308,7 +309,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 				variant={"contained"}
 				color={"primary"}
 				size={"large"}
-				onClick={createPoi}>
+				onClick={editPoi}>
 				{
 					loading ? "Chargement ..." : "Mettre à jour"
 				}

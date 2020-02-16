@@ -1,9 +1,9 @@
 import React, {ChangeEvent, useCallback, useEffect, useState} from "react";
 import LocalizedResourceField from "./LocalizedResourceField";
 import {
-	Box, Button, createStyles, Divider,
+	Button, createStyles, Divider,
 	FormControlLabel, FormGroup,
-	Grid, GridList, GridListTile, Switch, TextField, Typography
+	Grid, Switch, TextField, Typography
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import useIslandListService from "../Hooks/UseIslandListService";
@@ -93,16 +93,12 @@ export default function CreatePoiForm() {
 		setLoading(true);
 		const files = await mediaService.upload(medias);
 		const request: PoiWriteRequest = {
-			title,
-			description,
-			latitude,
-			longitude,
+			title, description, details,
+			latitude, longitude,
+			thingsToDo, sponsored, featured,
 			themeId: theme.id,
-			thingsToDo,
-			sponsored,
-			details,
-			medias: files,
 			islandId: island.id,
+			medias: files,
 		};
 		poiService.createPoi(request)
 			.then(() => navigation.push("/pois"))
@@ -112,8 +108,7 @@ export default function CreatePoiForm() {
 		title, details, description,
 		latitude, longitude, theme,
 		thingsToDo, sponsored, featured, medias,
-		island, setException, setLoading,
-		loading, exception
+		island
 	]);
 
 	const extractFrenchLocalizedString = (localizedResource: LocalizedResource) => {
@@ -128,7 +123,7 @@ export default function CreatePoiForm() {
 				{currentException.message}
 			</Alert>
 		}
-		<form onSubmit={createPoi} >
+		<form>
 			<LocalizedResourceField
 				label={"Nom"}
 				value={title}
@@ -174,7 +169,8 @@ export default function CreatePoiForm() {
 				<Button
 					color={"primary"}
 					size={"large"}
-					className={classes.shrinkFormControl}>
+					className={classes.shrinkFormControl}
+					onClick={() => navigation.push("/themes/create")}>
 					<AddIcon />
 					Créer un thème
 				</Button>
@@ -253,7 +249,6 @@ export default function CreatePoiForm() {
 				fullWidth
 				disableElevation
 				disabled={!valid}
-				type={"submit"}
 				className={classes.formControl}
 				variant={"contained"}
 				color={"primary"}

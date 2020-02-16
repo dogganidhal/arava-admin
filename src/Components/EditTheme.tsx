@@ -1,11 +1,12 @@
-import React from "react";
 import {useHistory, useParams} from "react-router-dom";
-import usePoiService from "../Hooks/UsePoiService";
+import {Breadcrumbs, Button, Card, CardContent, createStyles, Theme, Typography} from "@material-ui/core";
+import React from "react";
+import {makeStyles} from "@material-ui/core/styles";
+import CreateThemeForm from "./CreateThemeForm";
+import useThemeService from "../Hooks/UseThemeService";
 import AppLoader from "./AppLoader";
 import Alert from "@material-ui/lab/Alert";
-import {Breadcrumbs, Button, Card, CardContent, createStyles, Theme, Typography} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
-import EditPoiForm from "./EditPoiForm";
+import EditThemeForm from "./EditThemeForm";
 
 const useStyles = makeStyles((theme: Theme) => {
 	return createStyles({
@@ -25,15 +26,15 @@ const useStyles = makeStyles((theme: Theme) => {
 	});
 });
 
-interface EditPoiProps {
-	readonly poiId: string;
+interface EditThemeProps {
+	readonly themeId: string;
 }
 
-export default function EditPoi() {
+export default function EditTheme() {
 	const classes = useStyles();
 	const navigation = useHistory();
-	const {poiId} = useParams<EditPoiProps>();
-	const [isLoading, exception, poi] = usePoiService(poiId);
+	const {themeId} = useParams<EditThemeProps>();
+	const [loading, exception, theme] = useThemeService(themeId);
 
 	if (exception) {
 		return <Alert severity="error">
@@ -41,29 +42,29 @@ export default function EditPoi() {
 		</Alert>;
 	}
 
-	if (isLoading || !poi) {
+	if (loading || !theme) {
 		return <AppLoader />;
 	}
-
-	const poiTitle = poi?.title.find(t => t.language.code === 'fr')?.resource;
 
 	return <div>
 		<Card variant={"outlined"} className={classes.breadcrumbs}>
 			<Breadcrumbs aria-label="breadcrumb">
-				<Button color="primary" onClick={() => navigation.push("/pois")}>
-					Points d'intérêt
+				<Button color="primary" onClick={() => navigation.push("/themes")}>
+					Thèmes
 				</Button>
-				<Button disabled color="primary">
-					{poiTitle}
+				<Button
+					disabled
+					color="primary">
+					{theme.name.find(n => n.language.code === 'fr')?.resource}
 				</Button>
 			</Breadcrumbs>
 		</Card>
 		<Card className={classes.card} variant={"outlined"}>
 			<CardContent className={classes.form}>
 				<Typography variant={"h6"}>
-					{poiTitle}
+					{theme.name.find(n => n.language.code === 'fr')?.resource}
 				</Typography>
-				<EditPoiForm poi={poi}/>
+				<EditThemeForm theme={theme} />
 			</CardContent>
 		</Card>
 	</div>;

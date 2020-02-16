@@ -10,6 +10,8 @@ import EditIsland from "../Components/EditIsland";
 import CreatePoi from "../Components/CreatePoi";
 import EditPoi from "../Components/EditPoi";
 import ThemeList from "../Components/ThemeList";
+import CreateTheme from "../Components/CreateTheme";
+import EditTheme from "../Components/EditTheme";
 
 interface IRouteConfig {
 	readonly path: string;
@@ -54,13 +56,6 @@ const NavigationConfig: INavigationConfig = {
 			exact: true
 		},
 		{
-			path: '/users',
-			title: `Utilisateurs`,
-			component: <UserList />,
-			icon: <StyledFontawesomeIcon icon={faUser} />,
-			exact: true
-		},
-		{
 			path: '/themes',
 			title: `Thèmes`,
 			component: <ThemeList />,
@@ -79,6 +74,21 @@ const NavigationConfig: INavigationConfig = {
 		{
 			path: '/pois/:poiId',
 			component: <EditPoi />
+		},
+		{
+			path: '/themes/create',
+			component: <CreateTheme />
+		},
+		{
+			path: '/themes/:themeId',
+			component: <EditTheme />
+		},
+		{
+			path: '/users',
+			title: `Utilisateurs`,
+			component: <UserList />,
+			icon: <StyledFontawesomeIcon icon={faUser} />,
+			exact: true
 		},
 	]
 };

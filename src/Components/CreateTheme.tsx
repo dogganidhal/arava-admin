@@ -1,11 +1,8 @@
-import React from "react";
-import {useHistory, useParams} from "react-router-dom";
-import usePoiService from "../Hooks/UsePoiService";
-import AppLoader from "./AppLoader";
-import Alert from "@material-ui/lab/Alert";
+import {useHistory} from "react-router-dom";
 import {Breadcrumbs, Button, Card, CardContent, createStyles, Theme, Typography} from "@material-ui/core";
+import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import EditPoiForm from "./EditPoiForm";
+import CreateThemeForm from "./CreateThemeForm";
 
 const useStyles = makeStyles((theme: Theme) => {
 	return createStyles({
@@ -25,45 +22,27 @@ const useStyles = makeStyles((theme: Theme) => {
 	});
 });
 
-interface EditPoiProps {
-	readonly poiId: string;
-}
-
-export default function EditPoi() {
+export default function CreateTheme() {
 	const classes = useStyles();
 	const navigation = useHistory();
-	const {poiId} = useParams<EditPoiProps>();
-	const [isLoading, exception, poi] = usePoiService(poiId);
-
-	if (exception) {
-		return <Alert severity="error">
-			{exception.message}
-		</Alert>;
-	}
-
-	if (isLoading || !poi) {
-		return <AppLoader />;
-	}
-
-	const poiTitle = poi?.title.find(t => t.language.code === 'fr')?.resource;
 
 	return <div>
 		<Card variant={"outlined"} className={classes.breadcrumbs}>
 			<Breadcrumbs aria-label="breadcrumb">
-				<Button color="primary" onClick={() => navigation.push("/pois")}>
-					Points d'intérêt
+				<Button color="primary" onClick={() => navigation.push("/themes")}>
+					Thèmes
 				</Button>
 				<Button disabled color="primary">
-					{poiTitle}
+					Créer
 				</Button>
 			</Breadcrumbs>
 		</Card>
 		<Card className={classes.card} variant={"outlined"}>
 			<CardContent className={classes.form}>
 				<Typography variant={"h6"}>
-					{poiTitle}
+					Créer un nouveau thème
 				</Typography>
-				<EditPoiForm poi={poi}/>
+				<CreateThemeForm />
 			</CardContent>
 		</Card>
 	</div>;

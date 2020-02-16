@@ -45,15 +45,14 @@ function MapContainer(props: MapContainerProps) {
 			className={classes.container}>
 			<Map
 				{...props}
-					initialCenter={initialCoordinate ? {
-						lat: initialCoordinate.latitude,
-						lng: initialCoordinate.longitude
-					} :
-					{ // Tahiti coordinate
-						lat: -17.688706137901743,
-						lng: -149.3549765692033
-					}
-				}
+				initialCenter={initialCoordinate ? {
+					lat: initialCoordinate.latitude,
+					lng: initialCoordinate.longitude
+				} :
+				{ // Tahiti coordinate
+					lat: -17.688706137901743,
+					lng: -149.3549765692033
+				}}
 				zoom={initialZoom || 11}
 				google={google}
 				// @ts-ignore

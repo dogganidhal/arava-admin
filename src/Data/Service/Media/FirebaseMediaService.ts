@@ -3,12 +3,12 @@ import {injectable} from "inversify";
 import firebase from "firebase";
 import MediaWriteRequest from "../../Model/MediaWriteRequest";
 import PreparedMedia from "../../Model/PreparedMedia";
-
+import { v4 as uuid } from "uuid";
 
 @injectable()
 export default class FirebaseMediaService extends MediaService {
 
-	private storageRef = firebase.storage().ref("media");
+	private storageRef = firebase.storage();
 
 	public upload(media: PreparedMedia): Promise<MediaWriteRequest>;
 	public upload(media: PreparedMedia[]): Promise<MediaWriteRequest[]>;
@@ -23,7 +23,9 @@ export default class FirebaseMediaService extends MediaService {
 	}
 
 	private async uploadSingle(file: File): Promise<MediaWriteRequest> {
-		const snapshot = await this.storageRef.put(file);
+		const snapshot = await this.storageRef
+			.ref(`/media/${uuid()}-${file.name}`)
+			.put(file);
 		const url = await snapshot.ref.getDownloadURL();
 		return {
 			url,
