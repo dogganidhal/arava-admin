@@ -6,7 +6,7 @@ import {injectable} from "inversify";
 @injectable()
 export default abstract class AbstractAxiosService {
 
-	public async post<T>(uri: string, data: any): Promise<T> {
+	public async post<T>(uri: string, data?: any): Promise<T> {
 		try {
 			const response = await Axios.post(uri, data);
 			return response.data as T;
@@ -15,7 +15,7 @@ export default abstract class AbstractAxiosService {
 		}
 	}
 
-	public async put<T>(uri: string, data: any): Promise<T> {
+	public async put<T>(uri: string, data?: any): Promise<T> {
 		try {
 			const response = await Axios.put(uri, data);
 			return response.data as T;

@@ -66,6 +66,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 	const [sponsored, setSponsored] = useState(poi.sponsored);
 	const [featured, setFeatured] = useState(poi.featured);
 	const [thingsToDo, setThingsToDo] = useState(poi.thingsToDo);
+	const [draft, setDraft] = useState(poi.draft);
 	const [latitude, setLatitude] = useState(poi.coordinate.latitude);
 	const [longitude, setLongitude] = useState(poi.coordinate.longitude);
 	const [island, setIsland] = useState(poi.island);
@@ -102,6 +103,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 			thingsToDo,
 			sponsored,
 			featured,
+			draft,
 			details,
 			medias: files,
 			islandId: island.id,
@@ -112,7 +114,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 			.finally(() => setLoading(false));
 	}, [
 		title, details, description,
-		latitude, longitude, theme,
+		latitude, longitude, theme, draft,
 		thingsToDo, sponsored, medias,
 		island, setException, setLoading,
 		loading, exception, poi, featured
@@ -259,6 +261,16 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 						/>
 					}
 					label="Mis en avant"
+				/>
+				<FormControlLabel
+					control={
+						<Switch
+							checked={draft}
+							onChange={() => setDraft(!draft)}
+							color="primary"
+						/>
+					}
+					label="Brouillon"
 				/>
 			</FormGroup>
 			<Divider className={classes.divider} />

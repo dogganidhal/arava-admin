@@ -17,6 +17,7 @@ export default interface Poi {
 	readonly sponsored: boolean;
 	readonly featured: boolean;
 	readonly thingsToDo: boolean;
+	readonly draft: boolean;
 	readonly medias: Media[];
 	readonly theme: PoiTheme;
 	readonly comments: Comment[];

@@ -57,6 +57,10 @@ export default class AxiosPoiService extends AbstractAxiosService implements Poi
 		return this.put("/island", request);
 	}
 
+	public async toggleDraft(poiId: string): Promise<void> {
+		return this.post(`/poi/${poiId}/toggle-draft`);
+	}
+
 	public async deletePoi(id: string): Promise<void> {
 		return this.delete(`/poi/${id}`);
 	}

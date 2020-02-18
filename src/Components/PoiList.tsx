@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {
 	Button, createStyles, Fab,
 	IconButton, InputBase, Paper,
@@ -15,6 +15,9 @@ import {useHistory} from "react-router-dom";
 import usePoiFilter from "../Hooks/UsePoiFilter";
 import CheckIcon from "@material-ui/icons/Check";
 import CancelIcon from "@material-ui/icons/Close";
+import Poi from "../Data/Model/Poi";
+import useIoC from "../Hooks/UseIoC";
+import PoiService from "../Data/Service/Poi/PoiService";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -55,9 +58,37 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function PoiList() {
 	const classes = useStyles();
-	const [isLoading, exception, pois] = usePoiListService();
+
 	const navigation = useHistory();
+
+	const [isLoading, exception, pois] = usePoiListService();
 	const [filteredPois, setQuery] = usePoiFilter(pois);
+	const [allPois, setAllPois] = useState(filteredPois);
+
+	const poiService = useIoC(PoiService);
+
+	useEffect(() => setAllPois(filteredPois), [filteredPois]);
+
+	const togglePoiDraft = useCallback(async (poi: Poi, index: number) => {
+		// Toggle UI
+		const currentAllPois = allPois;
+		setAllPois([
+			...(allPois.slice(0, index)),
+			{
+				...poi,
+				draft: !poi.draft
+			},
+			...(allPois.slice(index + 1))
+		]);
+		// Call api to commit toggle
+		try {
+			await poiService.toggleDraft(poi.id);
+		} catch (e) {
+			// Rollback
+			setAllPois(currentAllPois);
+			// TODO: Give feedback
+		}
+	}, [allPois]);
 
 	if (isLoading) {
 		return <AppLoader />;
@@ -95,14 +126,14 @@ export default function PoiList() {
 						<TableCell>Titre</TableCell>
 						<TableCell align="center">Thème</TableCell>
 						<TableCell align="center">Île</TableCell>
+						<TableCell align="center">Brouillon</TableCell>
 						<TableCell align="center">Premium</TableCell>
-						<TableCell align="center">Choses à faire</TableCell>
 						<TableCell align="center">Mis en avant</TableCell>
 						<TableCell align="center">Actions</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{filteredPois.map(poi => (
+					{allPois.map((poi, index) => (
 						<TableRow key={poi.id}>
 							<TableCell component="th" scope="row">
 								{poi.title.find(t => t.language.code === 'fr')?.resource}
@@ -110,13 +141,19 @@ export default function PoiList() {
 							<TableCell align="center">{poi.theme.name.find(t => t.language.code === 'fr')?.resource}</TableCell>
 							<TableCell align="center">{poi.island.name}</TableCell>
 							<TableCell align="center">
-								{
-									poi.sponsored ? <CheckIcon /> : <CancelIcon />
-								}
+								<IconButton
+									color={"primary"}
+									onClick={() => togglePoiDraft(poi, index)}>
+									{
+										poi.draft ?
+											<CheckIcon /> :
+											<CancelIcon />
+									}
+								</IconButton>
 							</TableCell>
 							<TableCell align="center">
 								{
-									poi.thingsToDo ? <CheckIcon /> : <CancelIcon />
+									poi.sponsored ? <CheckIcon /> : <CancelIcon />
 								}
 							</TableCell>
 							<TableCell align="center">

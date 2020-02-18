@@ -51,6 +51,7 @@ export default function CreatePoiForm() {
 	const [sponsored, setSponsored] = useState(false);
 	const [thingsToDo, setThingsToDo] = useState(false);
 	const [featured, setFeatured] = useState(false);
+	const [draft, setDraft] = useState(true);
 	const [latitude, setLatitude] = useState();
 	const [longitude, setLongitude] = useState();
 	const [island, setIsland] = useState();
@@ -95,7 +96,7 @@ export default function CreatePoiForm() {
 		const request: PoiWriteRequest = {
 			title, description, details,
 			latitude, longitude,
-			thingsToDo, sponsored, featured,
+			thingsToDo, sponsored, featured, draft,
 			themeId: theme.id,
 			islandId: island.id,
 			medias: files,
@@ -106,7 +107,7 @@ export default function CreatePoiForm() {
 			.finally(() => setLoading(false));
 	}, [
 		title, details, description,
-		latitude, longitude, theme,
+		latitude, longitude, theme, draft,
 		thingsToDo, sponsored, featured, medias,
 		island
 	]);
@@ -204,6 +205,16 @@ export default function CreatePoiForm() {
 						/>
 					}
 					label="Mis en avant"
+				/>
+				<FormControlLabel
+					control={
+						<Switch
+							checked={draft}
+							onChange={() => setDraft(!draft)}
+							color="primary"
+						/>
+					}
+					label="Brouillon"
 				/>
 			</FormGroup>
 			<Divider className={classes.divider} />
