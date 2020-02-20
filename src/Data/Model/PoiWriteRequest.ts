@@ -15,6 +15,7 @@ export default interface PoiWriteRequest {
 	readonly draft?: boolean;
 	readonly latitude: number;
 	readonly longitude: number;
+	readonly mainImage: MediaWriteRequest;
 	readonly details: PoiDetailsWriteRequest;
 	readonly medias: MediaWriteRequest[];
 }

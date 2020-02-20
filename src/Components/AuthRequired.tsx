@@ -1,10 +1,11 @@
 import React, {PropsWithChildren, useState} from "react";
 import AuthContext from "../Context/AuthContext";
+import JwtAuthCredentials from "../Data/Model/JwtAuthCredentials";
 
 
 export default function AuthRequired(props: PropsWithChildren<{}>) {
-	const [authenticated, setAuthenticated] = useState();
-	const [credentials, setCredentials] = useState();
+	const [authenticated, setAuthenticated] = useState<boolean>(false);
+	const [credentials, setCredentials] = useState<JwtAuthCredentials>();
 
 	return (
 		<AuthContext.Provider value={{

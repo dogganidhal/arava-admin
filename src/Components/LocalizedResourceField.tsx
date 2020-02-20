@@ -51,7 +51,7 @@ export default function LocalizedResourceField(props: LocalizedResourceFieldProp
 		<Grid container spacing={2} className={classes.formRow}>
 			{
 				languages.map((language, index) => (
-					<Grid key={index} item xs={4}>
+					<Grid key={index} item xs={multiline ? 12 : 4}>
 						<TextField
 							fullWidth
 							required={required}

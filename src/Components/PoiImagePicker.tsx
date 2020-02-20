@@ -14,20 +14,61 @@ const useStyles = makeStyles(theme => createStyles({
 		marginTop: theme.spacing(2),
 		marginBottom: theme.spacing(2)
 	},
+	mainImage: {
+		height: theme.spacing(64),
+	},
 	media: {
 		height: theme.spacing(32),
 	},
 }));
 
 interface PoiImagePickerProps {
+	readonly mainImage?: PreparedMedia;
 	readonly images: PreparedMedia[];
-	onChanged(images: PreparedMedia[]): void;
+	onImagesChanged(images: PreparedMedia[]): void;
+	onMainImageChanged(mainImage: PreparedMedia): void;
 }
 
-export default function PoiImagePicker({ images, onChanged }: PoiImagePickerProps) {
+export default function PoiImagePicker(props: PoiImagePickerProps) {
 	const classes = useStyles();
+	const { images, onImagesChanged, mainImage, onMainImageChanged} = props;
+
+	const mainImageSrc = mainImage && (
+		("url" in mainImage && mainImage.url) ||
+		("file" in mainImage && URL.createObjectURL(mainImage.file))
+	) || "https://i1.wp.com/healthyclemsy.fr/wp-content/uploads/2016/05/placeholder-1.png";
 
 	return <div>
+		<Typography color={"textSecondary"}>
+			Image principale *
+		</Typography>
+		<Card
+			variant={"outlined"}>
+			<CardMedia
+				className={classes.mainImage}
+				image={mainImageSrc} />
+			<CardActions>
+				<Button
+					fullWidth
+					color={"primary"}
+					component={"label"}>
+					Remplacer
+					<input
+						type="file"
+						style={{ display: "none" }}
+						onChange={e => {
+							if (e.target.files && e.target.files.length > 0) {
+								const file = e.target.files.item(0);
+								if (file) {
+									onMainImageChanged({
+										file
+									});
+								}
+							}
+						}}/>
+				</Button>
+			</CardActions>
+		</Card>
 		<Typography color={"textSecondary"}>
 			Photos / Vidéos
 		</Typography>
@@ -54,9 +95,25 @@ export default function PoiImagePicker({ images, onChanged }: PoiImagePickerProp
 												...(images.slice(0, index)),
 												...(images.slice(index + 1))
 											];
-											onChanged(newImages);
+											onImagesChanged(newImages);
 										}}>
 										Supprimer
+										<input
+											type="file"
+											style={{ display: "none" }}
+											onChange={e => {
+												if (e.target.files && e.target.files.length > 0) {
+													const file = e.target.files.item(0);
+													if (file) {
+														onImagesChanged([
+															...(images.length > 0 ? images : []),
+															{
+																file
+															}
+														]);
+													}
+												}
+											}}/>
 									</Button>
 								</CardActions>
 							</Card>
@@ -79,7 +136,7 @@ export default function PoiImagePicker({ images, onChanged }: PoiImagePickerProp
 					if (e.target.files && e.target.files.length > 0) {
 						const file = e.target.files.item(0);
 						if (file) {
-							onChanged([
+							onImagesChanged([
 								...(images.length > 0 ? images : []),
 								{
 									file

@@ -52,12 +52,13 @@ export default function CreatePoiForm() {
 	const [thingsToDo, setThingsToDo] = useState(false);
 	const [featured, setFeatured] = useState(false);
 	const [draft, setDraft] = useState(true);
-	const [latitude, setLatitude] = useState();
-	const [longitude, setLongitude] = useState();
-	const [island, setIsland] = useState();
-	const [theme, setTheme] = useState();
+	const [latitude, setLatitude] = useState(0);
+	const [longitude, setLongitude] = useState(0);
+	const [island, setIsland] = useState<Island>();
+	const [theme, setTheme] = useState<PoiTheme>();
 	const [details, setDetails] = useState<PoiDetailsWriteRequest>({});
 	const [medias, setMedias] = useState([] as PreparedMedia[]);
+	const [mainImage, setMainImage] = useState<PreparedMedia>();
 
 	const [islandsLoading, islandsException, islands] = useIslandListService();
 	const [themesLoading, themesException, themes] = useThemeListService();
@@ -82,24 +83,28 @@ export default function CreatePoiForm() {
 		setValid(
 			theme !== undefined &&
 			island !== undefined &&
+			mainImage !== undefined &&
 			localizedResourceValid(title) &&
 			localizedResourceValid(description)
 		);
-	}, [theme, island, title, description]);
+	}, [theme, island, title, description, mainImage]);
 
 	const currentException = [islandsException, themesException, exception]
 		.find(exception => exception);
 
 	const createPoi = useCallback(async () => {
+		if (!mainImage) return;
 		setLoading(true);
 		const files = await mediaService.upload(medias);
+		const mainMediaFile = await mediaService.upload(mainImage);
 		const request: PoiWriteRequest = {
 			title, description, details,
 			latitude, longitude,
 			thingsToDo, sponsored, featured, draft,
-			themeId: theme.id,
-			islandId: island.id,
+			themeId: theme!.id,
+			islandId: island!.id,
 			medias: files,
+			mainImage: mainMediaFile,
 		};
 		poiService.createPoi(request)
 			.then(() => navigation.push("/pois"))
@@ -109,7 +114,7 @@ export default function CreatePoiForm() {
 		title, details, description,
 		latitude, longitude, theme, draft,
 		thingsToDo, sponsored, featured, medias,
-		island
+		island, mainImage
 	]);
 
 	const extractFrenchLocalizedString = (localizedResource: LocalizedResource) => {
@@ -140,6 +145,7 @@ export default function CreatePoiForm() {
 				onChanged={resource => {
 					setDescription(resource);
 				}}/>
+			<Divider className={classes.divider} />
 			<Autocomplete
 				className={classes.formControl}
 				options={islands}
@@ -250,7 +256,9 @@ export default function CreatePoiForm() {
 			</div>
 			<Divider className={classes.divider} />
 			<PoiImagePicker
-				onChanged={medias => setMedias(medias)}
+				onMainImageChanged={mainImage => setMainImage(mainImage)}
+				onImagesChanged={medias => setMedias(medias)}
+				mainImage={mainImage}
 				images={medias}/>
 			<Divider className={classes.divider} />
 			<CreatePoiDetailsForm
@@ -259,13 +267,13 @@ export default function CreatePoiForm() {
 			<Button
 				fullWidth
 				disableElevation
-				disabled={!valid}
+				disabled={!valid || loading}
 				className={classes.formControl}
 				variant={"contained"}
 				color={"primary"}
 				size={"large"}
 				onClick={createPoi}>
-				Créer
+				{ loading ? "Chargement ..." : "Créer" }
 			</Button>
 		</form>
 	</div>;

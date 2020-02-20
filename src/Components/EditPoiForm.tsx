@@ -73,6 +73,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 	const [theme, setTheme] = useState(poi.theme);
 	const [details, setDetails] = useState(poiDetailsMapper.map(poi.details));
 	const [medias, setMedias] = useState(poi.medias as PreparedMedia[]);
+	const [mainImage, setMainImage] = useState(poi.mainImage as PreparedMedia);
 	const [success, setSuccess] = useState(false);
 
 	const [islandsLoading, islandsException, islands] = useIslandListService();
@@ -93,6 +94,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 	const editPoi = useCallback(async () => {
 		setLoading(true);
 		const files = await mediaService.upload(medias);
+		const mainImageFile = await mediaService.upload(mainImage);
 		const request: PoiWriteRequest = {
 			id: poi.id,
 			title,
@@ -107,6 +109,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 			details,
 			medias: files,
 			islandId: island.id,
+			mainImage: mainImageFile
 		};
 		poiService.updatePoi(request)
 			.then(() => setSuccess(true))
@@ -117,7 +120,8 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 		latitude, longitude, theme, draft,
 		thingsToDo, sponsored, medias,
 		island, setException, setLoading,
-		loading, exception, poi, featured
+		loading, exception, poi, featured,
+		mainImage
 	]);
 
 	const toggleDeleteDialog = () => setDeleteDialogOpen(!deleteDialogOpen);
@@ -196,6 +200,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 				onChanged={resource => {
 					setDescription(resource);
 				}}/>
+			<Divider className={classes.divider} />
 			<Autocomplete
 				className={classes.formControl}
 				options={islands}
@@ -307,7 +312,9 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 			</div>
 			<Divider className={classes.divider} />
 			<PoiImagePicker
-				onChanged={medias => setMedias(medias)}
+				onMainImageChanged={mainImage => setMainImage(mainImage)}
+				onImagesChanged={medias => setMedias(medias)}
+				mainImage={mainImage}
 				images={medias}/>
 			<Divider className={classes.divider} />
 			<CreatePoiDetailsForm
