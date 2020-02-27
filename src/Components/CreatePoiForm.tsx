@@ -23,7 +23,6 @@ import MediaService from "../Data/Service/Media/MediaService";
 import PoiDetailsWriteRequest from "../Data/Model/PoiDetailsWriteRequest";
 import PreparedMedia from "../Data/Model/PreparedMedia";
 import PoiImagePicker from "./PoiImagePicker";
-import {useForm} from "react-hook-form";
 import LocalizedResourceWriteRequest from "../Data/Model/LocalizedResourceWriteRequest";
 
 const useStyles = makeStyles(theme => createStyles({
