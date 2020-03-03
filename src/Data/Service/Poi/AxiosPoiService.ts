@@ -65,4 +65,7 @@ export default class AxiosPoiService extends AbstractAxiosService implements Poi
 		return this.delete(`/poi/${id}`);
 	}
 
+	public async deleteTheme(id: string): Promise<void> {
+		return this.delete(`/poi/theme/${id}`);
+	}
 }

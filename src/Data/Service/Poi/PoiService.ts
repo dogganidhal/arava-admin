@@ -27,5 +27,6 @@ export default abstract class PoiService {
 	abstract toggleDraft(poiId: string): Promise<void>;
 
 	abstract deletePoi(id: string): Promise<void>;
+	abstract deleteTheme(id: string): Promise<void>;
 
 }
