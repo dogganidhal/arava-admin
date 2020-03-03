@@ -65,7 +65,6 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 	const [description, setDescription] = useState(localizedResourceMapper.map(poi.description));
 	const [sponsored, setSponsored] = useState(poi.sponsored);
 	const [featured, setFeatured] = useState(poi.featured);
-	const [thingsToDo, setThingsToDo] = useState(poi.thingsToDo);
 	const [draft, setDraft] = useState(poi.draft);
 	const [latitude, setLatitude] = useState(poi.coordinate.latitude);
 	const [longitude, setLongitude] = useState(poi.coordinate.longitude);
@@ -102,7 +101,6 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 			latitude,
 			longitude,
 			themeId: theme.id,
-			thingsToDo,
 			sponsored,
 			featured,
 			draft,
@@ -118,10 +116,9 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 	}, [
 		title, details, description,
 		latitude, longitude, theme, draft,
-		thingsToDo, sponsored, medias,
+		sponsored, medias, mainImage,
 		island, setException, setLoading,
 		loading, exception, poi, featured,
-		mainImage
 	]);
 
 	const toggleDeleteDialog = () => setDeleteDialogOpen(!deleteDialogOpen);
@@ -238,15 +235,6 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 				</Button>
 			</FormGroup>
 			<FormGroup row className={classes.formControl}>
-				<FormControlLabel
-					control={
-						<Switch
-							checked={thingsToDo}
-							onChange={() => setThingsToDo(!thingsToDo)}
-							color="primary"/>
-					}
-					label="Choses à faire"
-				/>
 				<FormControlLabel
 					control={
 						<Switch

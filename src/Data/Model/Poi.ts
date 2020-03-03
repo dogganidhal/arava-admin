@@ -16,7 +16,6 @@ export default interface Poi {
 	readonly island: Island;
 	readonly sponsored: boolean;
 	readonly featured: boolean;
-	readonly thingsToDo: boolean;
 	readonly draft: boolean;
 	readonly mainImage: Media;
 	readonly medias: Media[];

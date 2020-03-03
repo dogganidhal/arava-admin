@@ -7,5 +7,5 @@ export default interface PoiThemeWriteRequest {
 	readonly parentId?: string;
 	readonly subThemes?: PoiThemeWriteRequest[];
 	readonly name: LocalizedResourceWriteRequest;
-	readonly icon: MediaWriteRequest;
+	readonly icon?: MediaWriteRequest;
 }

@@ -40,7 +40,7 @@ export default function EditThemeForm({ theme }: EditThemeFormProps) {
 
 	const [themesLoading, themesException, themes] = useThemeListService();
 	const [name, setName] = useState(localizedResourceMapper.map(theme.name));
-	const [icon, setIcon] = useState<PreparedMedia>(theme.icon);
+	const [icon, setIcon] = useState<PreparedMedia | undefined>(theme.icon);
 	const [parent, setParent] = useState(theme.parent);
 
 	const [loading, setLoading] = useState(false);
@@ -51,7 +51,7 @@ export default function EditThemeForm({ theme }: EditThemeFormProps) {
 
 	const editTheme = useCallback(async () => {
 		setLoading(true);
-		const media = await mediaService.upload(icon);
+		const media = icon && await mediaService.upload(icon);
 		const request: PoiThemeWriteRequest = {
 			id: theme.id,
 			name: name,

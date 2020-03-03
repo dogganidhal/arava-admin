@@ -74,7 +74,7 @@ export default function ThemeList() {
 								{theme.name.find(t => t.language.code === 'fr')?.resource}
 							</TableCell>
 							<TableCell align="center">
-								<img className={classes.themeIcon} src={theme.icon.url}  alt={`${theme.id} icon`}/>
+								<img className={classes.themeIcon} src={theme.icon?.url}  alt={`Aucune icon`}/>
 							</TableCell>
 							<TableCell align="right">
 								<Button

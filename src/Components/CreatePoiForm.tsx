@@ -48,7 +48,6 @@ export default function CreatePoiForm() {
 	const [title, setName] = useState({});
 	const [description, setDescription] = useState({});
 	const [sponsored, setSponsored] = useState(false);
-	const [thingsToDo, setThingsToDo] = useState(false);
 	const [featured, setFeatured] = useState(false);
 	const [draft, setDraft] = useState(true);
 	const [latitude, setLatitude] = useState(0);
@@ -99,7 +98,7 @@ export default function CreatePoiForm() {
 		const request: PoiWriteRequest = {
 			title, description, details,
 			latitude, longitude,
-			thingsToDo, sponsored, featured, draft,
+			sponsored, featured, draft,
 			themeId: theme!.id,
 			islandId: island!.id,
 			medias: files,
@@ -112,7 +111,7 @@ export default function CreatePoiForm() {
 	}, [
 		title, details, description,
 		latitude, longitude, theme, draft,
-		thingsToDo, sponsored, featured, medias,
+		sponsored, featured, medias,
 		island, mainImage
 	]);
 
@@ -182,15 +181,6 @@ export default function CreatePoiForm() {
 				</Button>
 			</FormGroup>
 			<FormGroup row className={classes.formControl}>
-				<FormControlLabel
-					control={
-						<Switch
-							checked={thingsToDo}
-							onChange={() => setThingsToDo(!thingsToDo)}
-							color="primary"/>
-					}
-					label="Choses à faire"
-				/>
 				<FormControlLabel
 					control={
 						<Switch
