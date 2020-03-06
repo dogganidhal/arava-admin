@@ -95,18 +95,10 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 		const files = await mediaService.upload(medias);
 		const mainImageFile = await mediaService.upload(mainImage);
 		const request: PoiWriteRequest = {
-			id: poi.id,
-			title,
-			description,
-			latitude,
-			longitude,
-			themeId: theme.id,
-			sponsored,
-			featured,
-			draft,
-			details,
-			medias: files,
-			islandId: island.id,
+			id: poi.id, title, description,
+			latitude, longitude, themeId: theme.id,
+			sponsored, featured, draft, details,
+			medias: files, islandId: island.id,
 			mainImage: mainImageFile
 		};
 		poiService.updatePoi(request)
@@ -243,7 +235,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 							color="primary"
 						/>
 					}
-					label="Premium"
+					label="Choses à faire"
 				/>
 				<FormControlLabel
 					control={

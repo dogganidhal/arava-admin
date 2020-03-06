@@ -21,10 +21,8 @@ export default function configureAxios() {
 		if (response.status === 401) {
 			const credentialsJson = localStorage.getItem(kauthCredentialsKey);
 			if (credentialsJson) {
-				const oldCredential: JwtAuthCredentials = JSON.parse(credentialsJson);
-				const newCredentials = await new AxiosAuthService().refresh(oldCredential.refreshToken);
-				localStorage.setItem(kauthCredentialsKey, JSON.stringify(newCredentials));
-				return Axios.request(response.request);
+				localStorage.removeItem(kauthCredentialsKey);
+				window.location.reload();
 			}
 		}
 		return response;

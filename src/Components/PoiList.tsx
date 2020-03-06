@@ -127,7 +127,7 @@ export default function PoiList() {
 						<TableCell align="center">Thème</TableCell>
 						<TableCell align="center">Île</TableCell>
 						<TableCell align="center">Brouillon</TableCell>
-						<TableCell align="center">Premium</TableCell>
+						<TableCell align="center">Choses à faire</TableCell>
 						<TableCell align="center">Mis en avant</TableCell>
 						<TableCell align="center">Actions</TableCell>
 					</TableRow>

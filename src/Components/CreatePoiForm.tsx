@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => createStyles({
 export default function CreatePoiForm() {
 	const classes = useStyles();
 	const [title, setName] = useState({});
-	const [description, setDescription] = useState({});
+	const [description, setDescription] = useState();
 	const [sponsored, setSponsored] = useState(false);
 	const [featured, setFeatured] = useState(false);
 	const [draft, setDraft] = useState(true);
@@ -66,8 +66,6 @@ export default function CreatePoiForm() {
 	const poiService = useIoC(PoiService);
 	const mediaService = useIoC(MediaService);
 	const navigation = useHistory();
-	// TODO: Validate form with useForm
-	// const { register, setValue, handleSubmit, errors } = useForm();
 
 	const [valid, setValid] = useState(false);
 
@@ -81,20 +79,17 @@ export default function CreatePoiForm() {
 		setValid(
 			theme !== undefined &&
 			island !== undefined &&
-			mainImage !== undefined &&
-			localizedResourceValid(title) &&
-			localizedResourceValid(description)
+			localizedResourceValid(title)
 		);
-	}, [theme, island, title, description, mainImage]);
+	}, [theme, island, title]);
 
 	const currentException = [islandsException, themesException, exception]
 		.find(exception => exception);
 
 	const createPoi = useCallback(async () => {
-		if (!mainImage) return;
 		setLoading(true);
 		const files = await mediaService.upload(medias);
-		const mainMediaFile = await mediaService.upload(mainImage);
+		const mainMediaFile = mainImage && await mediaService.upload(mainImage);
 		const request: PoiWriteRequest = {
 			title, description, details,
 			latitude, longitude,
@@ -189,7 +184,7 @@ export default function CreatePoiForm() {
 							color="primary"
 						/>
 					}
-					label="Premium"
+					label="Choses à faire"
 				/>
 				<FormControlLabel
 					control={
