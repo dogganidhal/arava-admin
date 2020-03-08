@@ -9,3 +9,16 @@ export default interface PoiTheme {
 	readonly parent?: PoiTheme;
 	readonly subThemes?: PoiTheme[];
 }
+
+export function extractThemeNameWithParent (theme: PoiTheme): string {
+	const extractThemeName = (theme: PoiTheme) => theme.name
+		.find(r => r.language.code === 'fr')
+		?.resource ?? "";
+	let themeName = extractThemeName(theme);
+
+	let parent: PoiTheme | undefined = theme.parent;
+	if (parent) {
+		themeName = `${themeName} (${extractThemeName(parent)})`;
+	}
+	return themeName;
+}

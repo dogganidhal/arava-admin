@@ -18,7 +18,7 @@ import {
 	Snackbar, Switch,
 	TextField, Typography
 } from "@material-ui/core";
-import PoiTheme from "../Data/Model/PoiTheme";
+import PoiTheme, {extractThemeNameWithParent} from "../Data/Model/PoiTheme";
 import AddIcon from "@material-ui/icons/Add";
 import Map from "./Map";
 import CreatePoiDetailsForm from "./CreatePoiDetailsForm";
@@ -123,12 +123,6 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 		navigation.push("/pois");
 	}, [poi]);
 
-	const extractFrenchLocalizedString = (localizedResource: LocalizedResource) => {
-		const localizedString = localizedResource
-			.find(localizedString => localizedString.language.code === 'fr');
-		return (localizedString && localizedString.resource) || '';
-	};
-
 	function closeSuccessSnackbar() {
 		setSuccess(false);
 	}
@@ -207,11 +201,11 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 				<Autocomplete
 					className={classes.formControl}
 					options={themes}
-					getOptionLabel={category => extractFrenchLocalizedString(category.name)}
+					getOptionLabel={extractThemeNameWithParent}
 					value={theme}
-					onChange={(_: ChangeEvent<{}>, category: PoiTheme | null) => {
-						if (category) {
-							setTheme(category);
+					onChange={(_: ChangeEvent<{}>, theme: PoiTheme | null) => {
+						if (theme) {
+							setTheme(theme);
 						}
 					}}
 					renderInput={params => (

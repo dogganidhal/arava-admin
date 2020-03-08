@@ -10,7 +10,7 @@ import useIslandListService from "../Hooks/UseIslandListService";
 import useThemeListService from "../Hooks/UseThemeListService";
 import {Alert, Autocomplete} from "@material-ui/lab";
 import AddIcon from "@material-ui/icons/Add";
-import PoiTheme from "../Data/Model/PoiTheme";
+import PoiTheme, {extractThemeNameWithParent} from "../Data/Model/PoiTheme";
 import Island from "../Data/Model/Island";
 import LocalizedResource from "../Data/Model/LocalizedResource";
 import CreatePoiDetailsForm from "./CreatePoiDetailsForm";
@@ -110,12 +110,6 @@ export default function CreatePoiForm() {
 		island, mainImage
 	]);
 
-	const extractFrenchLocalizedString = (localizedResource: LocalizedResource) => {
-		const localizedString = localizedResource
-			.find(localizedString => localizedString.language.code === 'fr');
-		return (localizedString && localizedString.resource) || '';
-	};
-
 	return <div>
 		{
 			currentException && <Alert severity={"error"}>
@@ -156,7 +150,7 @@ export default function CreatePoiForm() {
 				<Autocomplete
 					className={classes.formControl}
 					options={themes}
-					getOptionLabel={category => extractFrenchLocalizedString(category.name)}
+					getOptionLabel={extractThemeNameWithParent}
 					value={theme}
 					onChange={(_: ChangeEvent<{}>, category: PoiTheme | null) => {
 						if (category) {
