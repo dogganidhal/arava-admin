@@ -9,6 +9,5 @@ export default interface PoiDetails {
 	readonly website?: string;
 	readonly facebookUrl?: string;
 	readonly instagramAccount?: string;
-	readonly openingHour?: string;
-	readonly closingHour?: string;
+	readonly openingHours?: string;
 }

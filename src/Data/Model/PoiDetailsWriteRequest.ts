@@ -7,7 +7,6 @@ export default interface PoiDetailsWriteRequest {
 	readonly email?: string;
 	readonly website?: string;
 	readonly facebookUrl?: string;
-	readonly instagramUrl?: string;
-	readonly openingHour?: string;
-	readonly closingHour?: string;
+	readonly instagramAccount?: string;
+	readonly openingHours?: string;
 }
