@@ -7,16 +7,12 @@ import PoiService from "../Data/Service/Poi/PoiService";
 import MediaService from "../Data/Service/Media/MediaService";
 import {useHistory} from "react-router-dom";
 import PoiWriteRequest from "../Data/Model/PoiWriteRequest";
-import LocalizedResource from "../Data/Model/LocalizedResource";
 import {Alert, Autocomplete} from "@material-ui/lab";
 import LocalizedResourceField from "./LocalizedResourceField";
 import Island from "../Data/Model/Island";
 import {
 	Button, createStyles, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-	Divider, FormControlLabel,
-	FormGroup, Grid,
-	Snackbar, Switch,
-	TextField, Typography
+	Divider, FormControlLabel, FormGroup, Grid, Snackbar, Switch, TextField, Typography
 } from "@material-ui/core";
 import PoiTheme, {extractThemeNameWithParent} from "../Data/Model/PoiTheme";
 import AddIcon from "@material-ui/icons/Add";
