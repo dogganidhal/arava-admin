@@ -23,7 +23,8 @@ const useStyles = makeStyles((theme: Theme) =>
 			padding: theme.spacing(2),
 		},
 		fab: {
-			position: 'absolute',
+			position: 'fixed',
+			zIndex: 999,
 			right: theme.spacing(2),
 			bottom: theme.spacing(2),
 		},

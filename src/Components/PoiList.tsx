@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {
 	Button,
 	createStyles, Fab, IconButton,
@@ -106,14 +106,15 @@ export default function PoiList() {
 
 	const [isLoading, exception, pois] = usePoiListService();
 	const [allPois, setAllPois] = useState(pois);
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
 
 	const poiService = useIoC(PoiService);
 
-	const togglePoiDraft = useCallback(async (poi: Poi, index: number) => {
+	useEffect(() => setAllPois(pois), [pois]);
+
+	const togglePoiDraft = useCallback(async (poi: Poi) => {
 		// Toggle UI
 		const currentAllPois = allPois;
+		const index = allPois.indexOf(poi);
 		setAllPois([
 			...(allPois.slice(0, index)),
 			{
@@ -133,17 +134,19 @@ export default function PoiList() {
 	}, [allPois]);
 
 	const mapToTableData = useCallback(() => {
-		return pois.map(poi => {
+		return allPois.map((poi, index) => {
 			return [
 				poi.title.find(t => t.language.code === 'fr')?.resource,
 				poi.theme.name.find(t => t.language.code === 'fr')?.resource,
 				poi.island.name,
 				poi.draft ? "oui" : "non",
 				poi.sponsored ? "oui" : "non",
-				poi.featured ? "oui" : "non"
+				poi.featured ? "oui" : "non",
+				poi.id,
+				index
 			];
 		});
-	}, [pois]);
+	}, [allPois]);
 
 	if (isLoading) {
 		return <AppLoader />;
@@ -174,8 +177,6 @@ export default function PoiList() {
 				filterType: "checkbox",
 				elevation: 0,
 				selectableRows: "none",
-				onChangePage: page => setPage(page),
-				onChangeRowsPerPage: rowsPerPage => setRowsPerPage(rowsPerPage),
 				customRowRender: (data: any[], dataIndex: number, rowIndex: number) => {
 					return <TableRow>
 						{
@@ -189,7 +190,12 @@ export default function PoiList() {
 							<TableCell>
 								<IconButton
 									color={"primary"}
-									onClick={() => togglePoiDraft(pois[page * rowsPerPage + rowIndex], rowIndex)}>
+									onClick={() => {
+										const poi = allPois.find(poi => poi.id === data[6]);
+										if (poi) {
+											togglePoiDraft(poi);
+										}
+									}}>
 									{
 										data[3] === "oui" ?
 											<CheckIcon /> :
@@ -213,7 +219,7 @@ export default function PoiList() {
 							<Button
 								component={Link}
 								color={"primary"}
-								to={`/pois/${pois[page * rowsPerPage + rowIndex].id}`}>
+								to={`/pois/${data[6]}`}>
 								Modifier
 							</Button>
 						</TableCell>
