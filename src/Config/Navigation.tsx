@@ -12,6 +12,7 @@ import EditPoi from "../Components/EditPoi";
 import ThemeList from "../Components/ThemeList";
 import CreateTheme from "../Components/CreateTheme";
 import EditTheme from "../Components/EditTheme";
+import ThemedFontawesomeIcon from "../Components/ThemedFontAwesomeIcon";
 
 interface IRouteConfig {
 	readonly path: string;
@@ -20,23 +21,11 @@ interface IRouteConfig {
 	readonly icon?: React.ReactElement;
 	readonly children?: IRouteConfig[];
 	readonly exact?: boolean;
+	readonly adminOnly: boolean;
 }
 
 interface INavigationConfig {
 	routes: IRouteConfig[];
-}
-
-interface FontawesomeIconProps extends PropsWithChildren<{}> {
-	icon: IconProp;
-}
-
-function StyledFontawesomeIcon(props: FontawesomeIconProps) {
-	const theme = useTheme();
-
-	return <FontAwesomeIcon
-		size={"lg"}
-		icon={props.icon}
-		color={theme.palette.primary.main}/>;
 }
 
 const NavigationConfig: INavigationConfig = {
@@ -45,50 +34,59 @@ const NavigationConfig: INavigationConfig = {
 			path: '/pois',
 			title: `Points d'intérêt`,
 			component: <PoiList />,
-			icon: <StyledFontawesomeIcon icon={faMapMarker} />,
-			exact: true
+			icon: <ThemedFontawesomeIcon icon={faMapMarker} />,
+			exact: true,
+			adminOnly: false
 		},
 		{
 			path: '/islands',
 			title: `Îles`,
 			component: <IslandList />,
-			icon: <StyledFontawesomeIcon icon={faGlobeAsia} />,
-			exact: true
+			icon: <ThemedFontawesomeIcon icon={faGlobeAsia} />,
+			exact: true,
+			adminOnly: true
 		},
 		{
 			path: '/themes',
 			title: `Thèmes`,
 			component: <ThemeList />,
-			icon: <StyledFontawesomeIcon icon={faTasks} />,
-			exact: true
+			icon: <ThemedFontawesomeIcon icon={faTasks} />,
+			exact: true,
+			adminOnly: true
 		},
 		{
 			path: '/islands/:islandId',
-			component: <EditIsland />
+			component: <EditIsland />,
+			adminOnly: true
 		},
 		{
 			path: '/pois/create',
 			component: <CreatePoi />,
-			exact: true
+			exact: true,
+			adminOnly: true
 		},
 		{
 			path: '/pois/:poiId',
-			component: <EditPoi />
+			component: <EditPoi />,
+			adminOnly: false
 		},
 		{
 			path: '/themes/create',
-			component: <CreateTheme />
+			component: <CreateTheme />,
+			adminOnly: true
 		},
 		{
 			path: '/themes/:themeId',
-			component: <EditTheme />
+			component: <EditTheme />,
+			adminOnly: true
 		},
 		{
 			path: '/users',
 			title: `Utilisateurs`,
 			component: <UserList />,
-			icon: <StyledFontawesomeIcon icon={faUser} />,
-			exact: true
+			icon: <ThemedFontawesomeIcon icon={faUser} />,
+			exact: true,
+			adminOnly: true
 		},
 	]
 };

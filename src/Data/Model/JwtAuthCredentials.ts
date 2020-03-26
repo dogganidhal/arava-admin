@@ -5,4 +5,5 @@ export default interface JwtAuthCredentials {
 	readonly refreshToken: string;
 	readonly tokenType: string;
 	readonly expiresIn: number;
+	readonly isAdmin: boolean;
 }

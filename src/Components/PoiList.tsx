@@ -16,6 +16,7 @@ import Poi from "../Data/Model/Poi";
 import useIoC from "../Hooks/UseIoC";
 import PoiService from "../Data/Service/Poi/PoiService";
 import MUIDataTable, {MUIDataTableColumnDef} from "mui-datatables";
+import AdminRestricted from "./AdminRestricted";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -159,16 +160,18 @@ export default function PoiList() {
 	}
 
 	return <div>
-		<Fab
-			variant={"extended"}
-			size={"large"}
-			color={"primary"}
-			className={classes.fab}
-			component={Link}
-			to={"/pois/create"}>
-			<SearchIcon />
-			Créer
-		</Fab>
+		<AdminRestricted>
+			<Fab
+				variant={"extended"}
+				size={"large"}
+				color={"primary"}
+				className={classes.fab}
+				component={Link}
+				to={"/pois/create"}>
+				<SearchIcon />
+				Créer
+			</Fab>
+		</AdminRestricted>
 		<MUIDataTable
 			title={"Liste des points d'intérêt"}
 			data={mapToTableData()}

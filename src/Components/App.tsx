@@ -1,12 +1,13 @@
 import React, {useContext, useEffect} from 'react';
-import {createMuiTheme, ThemeProvider} from "@material-ui/core";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import {createMuiTheme, ThemeProvider, Typography} from "@material-ui/core";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Nav from "./Nav";
 import NavigationConfig from "../Config/Navigation";
 import useAuth from "../Hooks/UseAuth";
 import Login from "./Login";
 import AppLoader from "./AppLoader";
 import AuthContext from "../Context/AuthContext";
+import AccessDenied from "./AccessDenied";
 
 const theme = createMuiTheme({
   palette: {
@@ -34,7 +35,7 @@ const theme = createMuiTheme({
 
 export default function App() {
   const {isLoading, loadAuth} = useAuth();
-  const {authenticated} = useContext(AuthContext);
+  const {authenticated, isAdmin} = useContext(AuthContext);
 
   useEffect(() => loadAuth(), []);
 
@@ -47,11 +48,16 @@ export default function App() {
         <BrowserRouter>
           <Nav>
             <Switch>
+              <Route path={"/"} exact>
+                <Redirect to={"/pois"} />
+              </Route>
               {
                 NavigationConfig.routes.map((route, index) => (
-                  <Route key={index} path={route.path} exact={route.exact}>
-                    {route.component}
-                  </Route>
+                  (!route.adminOnly || isAdmin) ?
+                    <Route key={index} path={route.path} exact={route.exact}>
+                      {route.component}
+                    </Route> :
+                    <AccessDenied />
                 ))
               }
             </Switch>

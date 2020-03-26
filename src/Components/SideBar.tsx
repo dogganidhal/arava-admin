@@ -3,9 +3,14 @@ import {
 	List, ListItem, ListItemIcon,
 	ListItemText, makeStyles, Theme, Typography
 } from "@material-ui/core";
-import React from "react";
+import React, {useContext} from "react";
 import NavigationConfig from "../Config/Navigation";
 import {useLocation, useHistory} from "react-router-dom";
+import AuthContext from "../Context/AuthContext";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import ThemedFontawesomeIcon from "./ThemedFontAwesomeIcon";
+import {kauthCredentialsKey} from "../Hooks/UseAuth";
 
 const drawerWidth = 240;
 
@@ -28,6 +33,7 @@ export default function SideBar() {
 	const classes = useStyles();
 	const location = useLocation();
 	const navigation = useHistory();
+	const {isAdmin} = useContext(AuthContext);
 
 	return <Drawer
 		className={classes.drawer}
@@ -40,6 +46,7 @@ export default function SideBar() {
 			{
 				NavigationConfig.routes
 					.filter(route => route.title && route.icon)
+					.filter(route => !route.adminOnly || isAdmin)
 					.map((route, index) => (
 					<ListItem
 						button
@@ -63,6 +70,22 @@ export default function SideBar() {
 					</ListItem>
 				))
 			}
+			<ListItem
+				button
+				onClick={() => {
+					localStorage.removeItem(kauthCredentialsKey);
+					window.location.reload();
+				}}>
+				<ListItemIcon>
+					<ThemedFontawesomeIcon icon={faSignOutAlt}/>
+				</ListItemIcon>
+				<ListItemText>
+					<Typography
+						color={"primary"} >
+						Se déconnecter
+					</Typography>
+				</ListItemText>
+			</ListItem>
 		</List>
 	</Drawer>;
 }
