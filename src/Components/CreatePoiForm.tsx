@@ -12,7 +12,6 @@ import {Alert, Autocomplete} from "@material-ui/lab";
 import AddIcon from "@material-ui/icons/Add";
 import PoiTheme, {extractThemeNameWithParent} from "../Data/Model/PoiTheme";
 import Island from "../Data/Model/Island";
-import LocalizedResource from "../Data/Model/LocalizedResource";
 import CreatePoiDetailsForm from "./CreatePoiDetailsForm";
 import Map from "./Map";
 import useIoC from "../Hooks/UseIoC";
@@ -24,6 +23,8 @@ import PoiDetailsWriteRequest from "../Data/Model/PoiDetailsWriteRequest";
 import PreparedMedia from "../Data/Model/PreparedMedia";
 import PoiImagePicker from "./PoiImagePicker";
 import LocalizedResourceWriteRequest from "../Data/Model/LocalizedResourceWriteRequest";
+import useUserListService from "../Hooks/UseUserListService";
+import User from "../Data/Model/User";
 
 const useStyles = makeStyles(theme => createStyles({
 	divider: {
@@ -57,6 +58,8 @@ export default function CreatePoiForm() {
 	const [details, setDetails] = useState<PoiDetailsWriteRequest>({});
 	const [medias, setMedias] = useState([] as PreparedMedia[]);
 	const [mainImage, setMainImage] = useState<PreparedMedia>();
+	const [owner, setOwner] = useState<User>();
+	const [usersLoading, usersException, users] = useUserListService();
 
 	const [islandsLoading, islandsException, islands] = useIslandListService();
 	const [themesLoading, themesException, themes] = useThemeListService();
@@ -96,6 +99,7 @@ export default function CreatePoiForm() {
 			sponsored, featured, draft,
 			themeId: theme!.id,
 			islandId: island!.id,
+			ownerId: owner?.id,
 			medias: files,
 			mainImage: mainMediaFile,
 		};
@@ -107,7 +111,7 @@ export default function CreatePoiForm() {
 		title, details, description,
 		latitude, longitude, theme, draft,
 		sponsored, featured, medias,
-		island, mainImage
+		island, mainImage, owner
 	]);
 
 	return <div>
@@ -145,6 +149,19 @@ export default function CreatePoiForm() {
 				}}
 				renderInput={params => (
 					<TextField {...params} label="Île" variant="filled" fullWidth />
+				)}/>
+			<Autocomplete
+				className={classes.formControl}
+				options={users}
+				getOptionLabel={user => `${user.firstName} ${user.lastName} (${user.email})`}
+				value={owner}
+				onChange={(_: ChangeEvent<{}>, user: User | null) => {
+					if (user) {
+						setOwner(user);
+					}
+				}}
+				renderInput={params => (
+					<TextField {...params} label="Responsable" variant="filled" fullWidth />
 				)}/>
 			<FormGroup row>
 				<Autocomplete

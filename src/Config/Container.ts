@@ -7,6 +7,8 @@ import MediaService from "../Data/Service/Media/MediaService";
 import FirebaseMediaService from "../Data/Service/Media/FirebaseMediaService";
 import LocalizedResourceMapper from "../Data/Mapper/LocalizedResourceMapper";
 import PoiDetailsMapper from "../Data/Mapper/PoiDetailsMapper";
+import UserService from "../Data/Service/User/UserService";
+import AxiosUserService from "../Data/Service/User/AxiosUserService";
 
 
 export function createContainer(): Container {
@@ -15,6 +17,7 @@ export function createContainer(): Container {
 	container.bind(AuthService).to(AxiosAuthService);
 	container.bind(PoiService).to(AxiosPoiService);
 	container.bind(MediaService).to(FirebaseMediaService);
+	container.bind(UserService).to(AxiosUserService);
 	container.bind(LocalizedResourceMapper).toSelf();
 	container.bind(PoiDetailsMapper).toSelf();
 

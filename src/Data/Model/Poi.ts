@@ -5,6 +5,7 @@ import PoiTheme from "./PoiTheme";
 import Ratings from "./Ratings";
 import PoiDetails from "./PoiDetails";
 import Island from "./Island";
+import User from "./User";
 
 
 export default interface Poi {
@@ -14,6 +15,7 @@ export default interface Poi {
 	readonly details: PoiDetails;
 	readonly coordinate: LatLng;
 	readonly island: Island;
+	readonly owner?: User;
 	readonly sponsored: boolean;
 	readonly featured: boolean;
 	readonly draft: boolean;

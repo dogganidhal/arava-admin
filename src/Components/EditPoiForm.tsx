@@ -23,6 +23,8 @@ import LocalizedResourceMapper from "../Data/Mapper/LocalizedResourceMapper";
 import PoiDetailsMapper from "../Data/Mapper/PoiDetailsMapper";
 import PoiImagePicker from "./PoiImagePicker";
 import PreparedMedia from "../Data/Model/PreparedMedia";
+import useUserListService from "../Hooks/UseUserListService";
+import User from "../Data/Model/User";
 
 const useStyles = makeStyles(theme => createStyles({
 	divider: {
@@ -70,6 +72,8 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 	const [medias, setMedias] = useState(poi.medias as PreparedMedia[]);
 	const [mainImage, setMainImage] = useState(poi.mainImage as PreparedMedia);
 	const [success, setSuccess] = useState(false);
+	const [owner, setOwner] = useState(poi.owner);
+	const [usersLoading, usersException, users] = useUserListService();
 
 	const [islandsLoading, islandsException, islands] = useIslandListService();
 	const [themesLoading, themesException, themes] = useThemeListService();
@@ -89,13 +93,13 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 	const editPoi = useCallback(async () => {
 		setLoading(true);
 		const files = await mediaService.upload(medias);
-		const mainImageFile = await mediaService.upload(mainImage);
+		const mainMediaFile = mainImage && await mediaService.upload(mainImage);
 		const request: PoiWriteRequest = {
 			id: poi.id, title, description,
 			latitude, longitude, themeId: theme.id,
 			sponsored, featured, draft, details,
 			medias: files, islandId: island.id,
-			mainImage: mainImageFile
+			mainImage: mainMediaFile, ownerId: owner?.id
 		};
 		poiService.updatePoi(request)
 			.then(() => setSuccess(true))
@@ -107,6 +111,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 		sponsored, medias, mainImage,
 		island, setException, setLoading,
 		loading, exception, poi, featured,
+		owner
 	]);
 
 	const toggleDeleteDialog = () => setDeleteDialogOpen(!deleteDialogOpen);
@@ -192,6 +197,19 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 				}}
 				renderInput={params => (
 					<TextField {...params} label="Île" variant="filled" fullWidth />
+				)}/>
+			<Autocomplete
+				className={classes.formControl}
+				options={users}
+				getOptionLabel={user => `${user.firstName} ${user.lastName} (${user.email})`}
+				value={owner}
+				onChange={(_: ChangeEvent<{}>, user: User | null) => {
+					if (user) {
+						setOwner(user);
+					}
+				}}
+				renderInput={params => (
+					<TextField {...params} label="Responsable" variant="filled" fullWidth />
 				)}/>
 			<FormGroup row>
 				<Autocomplete

@@ -2,7 +2,6 @@ import Axios from "axios";
 import * as AxiosLogger from "axios-logger";
 import {kauthCredentialsKey} from "../Hooks/UseAuth";
 import JwtAuthCredentials from "../Data/Model/JwtAuthCredentials";
-import AxiosAuthService from "../Data/Service/Auth/AxiosAuthService";
 
 
 export default function configureAxios() {
