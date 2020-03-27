@@ -140,9 +140,9 @@ export default function PoiList() {
 				poi.title.find(t => t.language.code === 'fr')?.resource,
 				poi.theme.name.find(t => t.language.code === 'fr')?.resource,
 				poi.island.name,
-				poi.draft ? "oui" : "non",
-				poi.sponsored ? "oui" : "non",
-				poi.featured ? "oui" : "non",
+				poi.draft ? "Oui" : "Non",
+				poi.sponsored ? "Oui" : "Non",
+				poi.featured ? "Oui" : "Non",
 				poi.id,
 				index
 			];
@@ -180,7 +180,7 @@ export default function PoiList() {
 				filterType: "checkbox",
 				elevation: 0,
 				selectableRows: "none",
-				customRowRender: (data: any[], dataIndex: number, rowIndex: number) => {
+				customRowRender: (data: any[]) => {
 					return <TableRow>
 						{
 							[0, 1, 2].map(dataIndex => (

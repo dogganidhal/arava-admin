@@ -3,7 +3,7 @@ import PoiList from "../Components/PoiList";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 import {useTheme} from "@material-ui/core";
-import {faGlobeAsia, faMapMarker, faTasks, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faComment, faGlobeAsia, faMapMarker, faTasks, faUser} from "@fortawesome/free-solid-svg-icons";
 import IslandList from "../Components/IslandList";
 import UserList from "../Components/UserList";
 import EditIsland from "../Components/EditIsland";
@@ -13,6 +13,7 @@ import ThemeList from "../Components/ThemeList";
 import CreateTheme from "../Components/CreateTheme";
 import EditTheme from "../Components/EditTheme";
 import ThemedFontawesomeIcon from "../Components/ThemedFontAwesomeIcon";
+import CommentList from "../Components/CommentList";
 
 interface IRouteConfig {
 	readonly path: string;
@@ -81,10 +82,10 @@ const NavigationConfig: INavigationConfig = {
 			adminOnly: true
 		},
 		{
-			path: '/users',
-			title: `Utilisateurs`,
-			component: <UserList />,
-			icon: <ThemedFontawesomeIcon icon={faUser} />,
+			path: '/comments',
+			title: `Commentaires`,
+			component: <CommentList />,
+			icon: <ThemedFontawesomeIcon icon={faComment} />,
 			exact: true,
 			adminOnly: true
 		},
