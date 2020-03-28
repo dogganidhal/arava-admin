@@ -3,6 +3,7 @@ import JwtAuthCredentials from "../Data/Model/JwtAuthCredentials";
 
 
 export interface AuthContextType {
+	readonly loading: boolean;
 	readonly authenticated: boolean;
 	readonly isAdmin: boolean;
 	readonly credentials?: JwtAuthCredentials;
@@ -11,6 +12,7 @@ export interface AuthContextType {
 }
 
 const AuthContext = React.createContext<AuthContextType>({
+	loading: true,
 	authenticated: false,
 	isAdmin: false,
 	asAuthenticated() {},

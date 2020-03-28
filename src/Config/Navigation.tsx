@@ -1,11 +1,7 @@
-import React, {PropsWithChildren} from "react";
+import React from "react";
 import PoiList from "../Components/PoiList";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {IconProp} from "@fortawesome/fontawesome-svg-core";
-import {useTheme} from "@material-ui/core";
-import {faComment, faGlobeAsia, faMapMarker, faTasks, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faComment, faGlobeAsia, faMapMarker, faTasks} from "@fortawesome/free-solid-svg-icons";
 import IslandList from "../Components/IslandList";
-import UserList from "../Components/UserList";
 import EditIsland from "../Components/EditIsland";
 import CreatePoi from "../Components/CreatePoi";
 import EditPoi from "../Components/EditPoi";
@@ -14,6 +10,9 @@ import CreateTheme from "../Components/CreateTheme";
 import EditTheme from "../Components/EditTheme";
 import ThemedFontawesomeIcon from "../Components/ThemedFontAwesomeIcon";
 import CommentList from "../Components/CommentList";
+import AdminRestricted from "../Components/AdminRestricted";
+import PartnerPoiList from "../Components/PartnerPoiList";
+import PartnerEditPoi from "../Components/PartnerEditPoi";
 
 interface IRouteConfig {
 	readonly path: string;
@@ -34,7 +33,9 @@ const NavigationConfig: INavigationConfig = {
 		{
 			path: '/pois',
 			title: `Points d'intérêt`,
-			component: <PoiList />,
+			component: <AdminRestricted shouldDisplayFallback fallback={PartnerPoiList}>
+				<PoiList />
+			</AdminRestricted>,
 			icon: <ThemedFontawesomeIcon icon={faMapMarker} />,
 			exact: true,
 			adminOnly: false
@@ -68,7 +69,9 @@ const NavigationConfig: INavigationConfig = {
 		},
 		{
 			path: '/pois/:poiId',
-			component: <EditPoi />,
+			component: <AdminRestricted shouldDisplayFallback fallback={PartnerEditPoi}>
+				<EditPoi />
+			</AdminRestricted>,
 			adminOnly: false
 		},
 		{

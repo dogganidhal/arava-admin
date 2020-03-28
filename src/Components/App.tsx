@@ -52,13 +52,15 @@ export default function App() {
                 <Redirect to={"/pois"} />
               </Route>
               {
-                NavigationConfig.routes.map((route, index) => (
-                  (!route.adminOnly || isAdmin) ?
-                    <Route key={index} path={route.path} exact={route.exact}>
-                      {route.component}
-                    </Route> :
-                    <AccessDenied />
-                ))
+                NavigationConfig.routes.map((route, index) => {
+                  console.log({route: route.path, allowed: !route.adminOnly || isAdmin});
+                  return <Route key={index} path={route.path} exact={route.exact}>
+                      {(!route.adminOnly || isAdmin) ?
+                        route.component :
+                        <AccessDenied />
+                      }
+                    </Route>;
+                })
               }
             </Switch>
           </Nav>
