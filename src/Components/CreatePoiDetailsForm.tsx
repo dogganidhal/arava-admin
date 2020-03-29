@@ -119,6 +119,7 @@ export default function CreatePoiDetailsForm(props: CreatePoiDetailsFormProps) {
 			}}/>
 		<TextField
 			fullWidth
+			multiline
 			className={classes.formControl}
 			label={"Horaires d'ouverture"}
 			value={value && value.openingHours}

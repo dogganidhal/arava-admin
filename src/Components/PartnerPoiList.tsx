@@ -129,8 +129,8 @@ export default function PartnerPoiList() {
 									}}>
 									{
 										data[3] === "Oui" ?
-											<CheckIcon /> :
-											<CancelIcon />
+											<CancelIcon /> :
+											<CheckIcon />
 									}
 								</IconButton>
 							</TableCell>

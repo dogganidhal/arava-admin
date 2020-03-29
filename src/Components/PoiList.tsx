@@ -201,8 +201,8 @@ export default function PoiList() {
 									}}>
 									{
 										data[3] === "oui" ?
-											<CheckIcon /> :
-											<CancelIcon />
+											<CancelIcon /> :
+											<CheckIcon />
 									}
 								</IconButton>
 							</TableCell>
