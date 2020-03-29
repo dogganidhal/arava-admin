@@ -12,6 +12,8 @@ import {Link} from "react-router-dom";
 import CheckIcon from "@material-ui/icons/Check";
 import CancelIcon from "@material-ui/icons/Close";
 import SearchIcon from '@material-ui/icons/Add';
+import NotInterestedIcon from '@material-ui/icons/NotInterested';
+import EditIcon from '@material-ui/icons/Edit';
 import Poi from "../Data/Model/Poi";
 import useIoC from "../Hooks/UseIoC";
 import PoiService from "../Data/Service/Poi/PoiService";
@@ -71,6 +73,12 @@ const columns: MUIDataTableColumnDef[] = [
 	},
 	{
 		name: "Île",
+		options: {
+			filterType: "dropdown"
+		}
+	},
+	{
+		name: "Responsable",
 		options: {
 			filterType: "dropdown"
 		}
@@ -140,6 +148,7 @@ export default function PoiList() {
 				poi.title.find(t => t.language.code === 'fr')?.resource,
 				poi.theme.name.find(t => t.language.code === 'fr')?.resource,
 				poi.island.name,
+				poi.owner ? `${poi.owner.firstName} ${poi.owner.lastName}` : 'Aucun responsable',
 				poi.draft ? "Oui" : "Non",
 				poi.sponsored ? "Oui" : "Non",
 				poi.featured ? "Oui" : "Non",
@@ -190,17 +199,25 @@ export default function PoiList() {
 							))
 						}
 						{
-							<TableCell>
+							<TableCell align={"center"} component="th" scope="row">
+								{data[3] !== 'Aucun responsable' ?
+									data[3] :
+									<NotInterestedIcon />
+								}
+							</TableCell>
+						}
+						{
+							<TableCell align={"center"}>
 								<IconButton
 									color={"primary"}
 									onClick={() => {
-										const poi = allPois.find(poi => poi.id === data[6]);
+										const poi = allPois.find(poi => poi.id === data[7]);
 										if (poi) {
 											togglePoiDraft(poi);
 										}
 									}}>
 									{
-										data[3] === "oui" ?
+										data[4] === "Oui" ?
 											<CancelIcon /> :
 											<CheckIcon />
 									}
@@ -208,10 +225,10 @@ export default function PoiList() {
 							</TableCell>
 						}
 						{
-							[4, 5].map(dataIndex => (
-								<TableCell>
+							[5, 6].map(dataIndex => (
+								<TableCell align={"center"}>
 									{
-										data[dataIndex] === "oui" ?
+										data[dataIndex] === "Oui" ?
 											<CheckIcon /> :
 											<CancelIcon />
 									}
@@ -219,12 +236,12 @@ export default function PoiList() {
 							))
 						}
 						<TableCell>
-							<Button
+							<IconButton
 								component={Link}
 								color={"primary"}
-								to={`/pois/${data[6]}`}>
-								Modifier
-							</Button>
+								to={`/pois/${data[7]}`}>
+								<EditIcon />
+							</IconButton>
 						</TableCell>
 					</TableRow>;
 				}

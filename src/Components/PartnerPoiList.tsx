@@ -108,6 +108,10 @@ export default function PartnerPoiList() {
 				filterType: "checkbox",
 				elevation: 0,
 				selectableRows: "none",
+				print: false,
+				filter: false,
+				download: false,
+				search: false,
 				customRowRender: (data: any[]) => {
 					return <TableRow>
 						{
