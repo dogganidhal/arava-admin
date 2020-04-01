@@ -6,6 +6,8 @@ export default interface PoiTheme {
 	readonly id: string;
 	readonly name: LocalizedResource;
 	readonly icon?: Media;
+	readonly marker?: Media;
+	readonly sponsoredMarker?: Media;
 	readonly parent?: PoiTheme;
 	readonly subThemes?: PoiTheme[];
 }

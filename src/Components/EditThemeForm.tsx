@@ -17,7 +17,6 @@ import {Autocomplete} from "@material-ui/lab";
 import PoiTheme from "../Data/Model/PoiTheme";
 import {makeStyles} from "@material-ui/core/styles";
 import LocalizedResource from "../Data/Model/LocalizedResource";
-import LocalizedResourceWriteRequest from "../Data/Model/LocalizedResourceWriteRequest";
 import useIoC from "../Hooks/UseIoC";
 import PoiService from "../Data/Service/Poi/PoiService";
 import PoiThemeWriteRequest from "../Data/Model/PoiThemeWriteRequest";
@@ -25,6 +24,7 @@ import MediaService from "../Data/Service/Media/MediaService";
 import {useHistory} from "react-router-dom";
 import LocalizedResourceMapper from "../Data/Mapper/LocalizedResourceMapper";
 import PreparedMedia from "../Data/Model/PreparedMedia";
+import SingleImagePicker from "./SingleImagePicker";
 
 const useStyles = makeStyles((theme: Theme) => {
 	return createStyles({
@@ -56,6 +56,8 @@ export default function EditThemeForm({ theme }: EditThemeFormProps) {
 	const [themesLoading, themesException, themes] = useThemeListService();
 	const [name, setName] = useState(localizedResourceMapper.map(theme.name));
 	const [icon, setIcon] = useState<PreparedMedia | undefined>(theme.icon);
+	const [marker, setMarker] = useState<PreparedMedia | undefined>(theme.marker);
+	const [sponsoredMarker, setSponsoredMarker] = useState<PreparedMedia | undefined>(theme.sponsoredMarker);
 	const [parent, setParent] = useState(theme.parent);
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
@@ -67,17 +69,21 @@ export default function EditThemeForm({ theme }: EditThemeFormProps) {
 
 	const editTheme = useCallback(async () => {
 		setLoading(true);
-		const media = icon && await mediaService.upload(icon);
+		const uploadedIcon = icon && await mediaService.upload(icon);
+		const uploadedMarker = marker && await mediaService.upload(marker);
+		const uploadedSponsoredMarker = sponsoredMarker && await mediaService.upload(sponsoredMarker);
 		const request: PoiThemeWriteRequest = {
 			id: theme.id,
 			name: name,
-			icon: media,
-			parentId: parent?.id
+			icon: uploadedIcon,
+			parentId: parent?.id,
+			marker: uploadedMarker,
+			sponsoredMarker: uploadedSponsoredMarker
 		};
 		await poiService.createPoiTheme(request);
 		setLoading(false);
 		navigation.push("/themes");
-	}, [icon, name, parent]);
+	}, [icon, name, parent, marker, sponsoredMarker]);
 
 	const toggleDeleteDialog = () => setDeleteDialogOpen(!deleteDialogOpen);
 
@@ -151,39 +157,23 @@ export default function EditThemeForm({ theme }: EditThemeFormProps) {
 				<TextField {...params} label="Parent" variant="filled" fullWidth />
 			)}
 		/>
-		<div className={classes.formControl}>
-			<Typography color={"textSecondary"}>
-				Icône
-			</Typography>
-			{
-				icon && <img className={classes.icon} src={
-					("url" in icon && icon.url) ||
-					("file" in icon && URL.createObjectURL(icon.file)) ||
-					undefined
-				}/>
-			}
-			<Button
-				disableElevation
-				className={classes.formControl}
-				color={"primary"}
-				variant={"contained"}
-				component={"label"}>
-				Sélectionner
-				<input
-					type="file"
-					style={{ display: "none" }}
-					onChange={e => {
-						if (e.target.files && e.target.files.length > 0) {
-							const file = e.target.files.item(0);
-							if (file) {
-								setIcon({
-									file
-								});
-							}
-						}
-					}}/>
-			</Button>
-		</div>
+		<SingleImagePicker
+			title={"Icône"}
+			onChange={icon => setIcon(icon)}
+			initialImage={icon}
+		/>
+		<SingleImagePicker
+			title={"Marqueur par défaut"}
+			onChange={marker => setMarker(marker)}
+			initialImage={marker}
+			imageType={"image/png"}
+		/>
+		<SingleImagePicker
+			title={"Marqueur à la une"}
+			onChange={sponsoredMarker => setSponsoredMarker(sponsoredMarker)}
+			initialImage={sponsoredMarker}
+			imageType={"image/png"}
+		/>
 		<Button
 			fullWidth
 			color={"primary"}

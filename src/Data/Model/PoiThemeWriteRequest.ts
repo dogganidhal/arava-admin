@@ -8,4 +8,6 @@ export default interface PoiThemeWriteRequest {
 	readonly subThemes?: PoiThemeWriteRequest[];
 	readonly name: LocalizedResourceWriteRequest;
 	readonly icon?: MediaWriteRequest;
+	readonly marker?: MediaWriteRequest;
+	readonly sponsoredMarker?: MediaWriteRequest;
 }

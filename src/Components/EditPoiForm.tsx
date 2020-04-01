@@ -239,8 +239,8 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 				<FormControlLabel
 					control={
 						<Switch
-							checked={sponsored}
-							onChange={() => setSponsored(!sponsored)}
+							checked={featured}
+							onChange={() => setFeatured(!featured)}
 							color="primary"
 						/>
 					}
@@ -249,8 +249,8 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 				<FormControlLabel
 					control={
 						<Switch
-							checked={featured}
-							onChange={() => setFeatured(!featured)}
+							checked={sponsored}
+							onChange={() => setSponsored(!sponsored)}
 							color="primary"
 						/>
 					}

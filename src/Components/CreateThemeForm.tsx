@@ -14,6 +14,8 @@ import PoiService from "../Data/Service/Poi/PoiService";
 import PoiThemeWriteRequest from "../Data/Model/PoiThemeWriteRequest";
 import MediaService from "../Data/Service/Media/MediaService";
 import {useHistory} from "react-router-dom";
+import SingleImagePicker from "./SingleImagePicker";
+import PreparedMedia from "../Data/Model/PreparedMedia";
 
 const useStyles = makeStyles((theme: Theme) => {
 	return createStyles({
@@ -33,6 +35,8 @@ export default function CreateThemeForm() {
 	const [themesLoading, themesException, themes] = useThemeListService();
 	const [name, setName] = useState({});
 	const [icon, setIcon] = useState();
+	const [marker, setMarker] = useState();
+	const [sponsoredMarker, setSponsoredMarker] = useState();
 	const [parent, setParent] = useState();
 	const [valid, setValid] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -50,22 +54,28 @@ export default function CreateThemeForm() {
 	useEffect(() => {
 		setValid(
 			icon !== undefined &&
+			marker !== undefined &&
+			sponsoredMarker !== undefined &&
 			localizedResourceValid(name)
 		);
-	}, [icon, name]);
+	}, [icon, name, marker, sponsoredMarker]);
 
 	const createTheme = useCallback(async () => {
 		setLoading(true);
-		const media = await mediaService.upload(icon);
+		const uploadedIcon = await mediaService.upload(icon);
+		const uploadedMarker = await mediaService.upload(marker);
+		const uploadedSponsoredMarker = await mediaService.upload(sponsoredMarker);
 		const request: PoiThemeWriteRequest = {
 			name: name,
-			icon: media,
-			parentId: parent?.id
+			icon: uploadedIcon,
+			parentId: parent?.id,
+			marker: uploadedMarker,
+			sponsoredMarker: uploadedSponsoredMarker
 		};
 		await poiService.createPoiTheme(request);
 		setLoading(false);
 		navigation.push("/themes");
-	}, [icon, name, parent]);
+	}, [icon, name, parent, marker, sponsoredMarker]);
 
 	if (themesLoading) {
 		return <AppLoader />;
@@ -101,35 +111,20 @@ export default function CreateThemeForm() {
 				<TextField {...params} label="Parent" variant="filled" fullWidth />
 			)}
 		/>
-		<div className={classes.formControl}>
-			<Typography color={"textSecondary"}>
-				Icône
-			</Typography>
-			{
-				icon && <img className={classes.icon} src={URL.createObjectURL(icon.file)} />
-			}
-			<Button
-				disableElevation
-				className={classes.formControl}
-				color={"primary"}
-				variant={"contained"}
-				component={"label"}>
-				Sélectionner
-				<input
-					type="file"
-					style={{ display: "none" }}
-					onChange={e => {
-						if (e.target.files && e.target.files.length > 0) {
-							const file = e.target.files.item(0);
-							if (file) {
-								setIcon({
-									file
-								});
-							}
-						}
-					}}/>
-			</Button>
-		</div>
+		<SingleImagePicker
+			title={"Icône"}
+			onChange={icon => setIcon(icon)}
+		/>
+		<SingleImagePicker
+			title={"Marqueur par défaut"}
+			onChange={marker => setMarker(marker)}
+			imageType={"image/png"}
+		/>
+		<SingleImagePicker
+			title={"Marqueur à la une"}
+			onChange={sponsoredMarker => setSponsoredMarker(sponsoredMarker)}
+			imageType={"image/png"}
+		/>
 		<Button
 			fullWidth
 			disabled={!valid}

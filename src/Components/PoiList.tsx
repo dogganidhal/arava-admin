@@ -156,8 +156,8 @@ export default function PoiList() {
 				poi.island.name,
 				poi.owner ? `${poi.owner.firstName} ${poi.owner.lastName}` : 'Aucun responsable',
 				poi.draft ? "Oui" : "Non",
-				poi.sponsored ? "Oui" : "Non",
 				poi.featured ? "Oui" : "Non",
+				poi.sponsored ? "Oui" : "Non",
 				poi.activity ? "Oui" : "Non",
 				poi.id,
 				index
