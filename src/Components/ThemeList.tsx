@@ -10,6 +10,7 @@ import Alert from "@material-ui/lab/Alert";
 import SearchIcon from "@material-ui/icons/Add";
 import {makeStyles} from "@material-ui/core/styles";
 import useThemeListService from "../Hooks/UseThemeListService";
+import ThemeExpandableListItem from "./ThemeExpandableListItem";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -60,34 +61,40 @@ export default function ThemeList() {
 			Créer
 		</Fab>
 		<Paper variant={"outlined"} >
-			<Table className={classes.table} aria-label="simple table">
-				<TableHead>
-					<TableRow>
-						<TableCell>Nom</TableCell>
-						<TableCell align="center">Icône</TableCell>
-						<TableCell align="right">Actions</TableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>
-					{themes.map(theme => (
-						<TableRow key={theme.id}>
-							<TableCell component="th" scope="row">
-								{theme.name.find(t => t.language.code === 'fr')?.resource}
-							</TableCell>
-							<TableCell align="center">
-								<img className={classes.themeIcon} src={theme.icon?.url}  alt={`Aucune icon`}/>
-							</TableCell>
-							<TableCell align="right">
-								<Button
-									color={"primary"}
-									onClick={() => navigation.push(`/themes/${theme.id}`)}>
-									Modifier
-								</Button>
-							</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
+			{
+				themes.filter(theme => !theme.parent)
+					.map(theme => (
+						<ThemeExpandableListItem key={theme.id} theme={theme}/>
+					))
+			}
+			{/*<Table className={classes.table} aria-label="simple table">*/}
+			{/*	<TableHead>*/}
+			{/*		<TableRow>*/}
+			{/*			<TableCell>Nom</TableCell>*/}
+			{/*			<TableCell align="center">Icône</TableCell>*/}
+			{/*			<TableCell align="right">Actions</TableCell>*/}
+			{/*		</TableRow>*/}
+			{/*	</TableHead>*/}
+			{/*	<TableBody>*/}
+			{/*		{themes.map(theme => (*/}
+			{/*			<TableRow key={theme.id}>*/}
+			{/*				<TableCell component="th" scope="row">*/}
+			{/*					{theme.name.find(t => t.language.code === 'fr')?.resource}*/}
+			{/*				</TableCell>*/}
+			{/*				<TableCell align="center">*/}
+			{/*					<img className={classes.themeIcon} src={theme.icon?.url}  alt={`Aucune icon`}/>*/}
+			{/*				</TableCell>*/}
+			{/*				<TableCell align="right">*/}
+			{/*					<Button*/}
+			{/*						color={"primary"}*/}
+			{/*						onClick={() => navigation.push(`/themes/${theme.id}`)}>*/}
+			{/*						Modifier*/}
+			{/*					</Button>*/}
+			{/*				</TableCell>*/}
+			{/*			</TableRow>*/}
+			{/*		))}*/}
+			{/*	</TableBody>*/}
+			{/*</Table>*/}
 		</Paper>
 	</div>;
 }
