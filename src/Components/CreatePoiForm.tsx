@@ -51,6 +51,7 @@ export default function CreatePoiForm() {
 	const [sponsored, setSponsored] = useState(false);
 	const [featured, setFeatured] = useState(false);
 	const [draft, setDraft] = useState(true);
+	const [activity, setActivity] = useState(false);
 	const [latitude, setLatitude] = useState(0);
 	const [longitude, setLongitude] = useState(0);
 	const [island, setIsland] = useState<Island>();
@@ -96,7 +97,7 @@ export default function CreatePoiForm() {
 		const request: PoiWriteRequest = {
 			title, description, details,
 			latitude, longitude,
-			sponsored, featured, draft,
+			sponsored, featured, draft, activity,
 			themeId: theme!.id,
 			islandId: island!.id,
 			ownerId: owner?.id,
@@ -111,7 +112,7 @@ export default function CreatePoiForm() {
 		title, details, description,
 		latitude, longitude, theme, draft,
 		sponsored, featured, medias,
-		island, mainImage, owner
+		island, mainImage, owner, activity
 	]);
 
 	return <div>
@@ -206,6 +207,16 @@ export default function CreatePoiForm() {
 						/>
 					}
 					label="Mis en avant"
+				/>
+				<FormControlLabel
+					control={
+						<Switch
+							checked={activity}
+							onChange={() => setActivity(!activity)}
+							color="primary"
+						/>
+					}
+					label="Activité"
 				/>
 				<FormControlLabel
 					control={

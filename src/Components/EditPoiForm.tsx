@@ -64,6 +64,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 	const [sponsored, setSponsored] = useState(poi.sponsored);
 	const [featured, setFeatured] = useState(poi.featured);
 	const [draft, setDraft] = useState(poi.draft);
+	const [activity, setActivity] = useState(poi.activity);
 	const [latitude, setLatitude] = useState(poi.coordinate.latitude);
 	const [longitude, setLongitude] = useState(poi.coordinate.longitude);
 	const [island, setIsland] = useState(poi.island);
@@ -97,7 +98,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 		const request: PoiWriteRequest = {
 			id: poi.id, title, description,
 			latitude, longitude, themeId: theme.id,
-			sponsored, featured, draft, details,
+			sponsored, featured, draft, details, activity,
 			medias: files, islandId: island.id,
 			mainImage: mainMediaFile, ownerId: owner?.id
 		};
@@ -111,7 +112,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 		sponsored, medias, mainImage,
 		island, setException, setLoading,
 		loading, exception, poi, featured,
-		owner
+		owner, activity
 	]);
 
 	const toggleDeleteDialog = () => setDeleteDialogOpen(!deleteDialogOpen);
@@ -254,6 +255,16 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 						/>
 					}
 					label="Mis en avant"
+				/>
+				<FormControlLabel
+					control={
+						<Switch
+							checked={activity}
+							onChange={() => setActivity(!activity)}
+							color="primary"
+						/>
+					}
+					label="Activité"
 				/>
 				<FormControlLabel
 					control={

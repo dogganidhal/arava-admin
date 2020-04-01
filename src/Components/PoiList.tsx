@@ -102,6 +102,12 @@ const columns: MUIDataTableColumnDef[] = [
 		}
 	},
 	{
+		name: "Activité",
+		options: {
+			sort: false
+		}
+	},
+	{
 		name: "Actions",
 		options: {
 			filter: false,
@@ -152,6 +158,7 @@ export default function PoiList() {
 				poi.draft ? "Oui" : "Non",
 				poi.sponsored ? "Oui" : "Non",
 				poi.featured ? "Oui" : "Non",
+				poi.activity ? "Oui" : "Non",
 				poi.id,
 				index
 			];
@@ -225,7 +232,7 @@ export default function PoiList() {
 							</TableCell>
 						}
 						{
-							[5, 6].map(dataIndex => (
+							[5, 6, 7].map(dataIndex => (
 								<TableCell align={"center"}>
 									{
 										data[dataIndex] === "Oui" ?
@@ -239,7 +246,7 @@ export default function PoiList() {
 							<IconButton
 								component={Link}
 								color={"primary"}
-								to={`/pois/${data[7]}`}>
+								to={`/pois/${data[8]}`}>
 								<EditIcon />
 							</IconButton>
 						</TableCell>

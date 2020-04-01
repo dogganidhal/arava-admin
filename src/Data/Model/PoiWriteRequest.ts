@@ -12,6 +12,7 @@ export default interface PoiWriteRequest {
 	readonly ownerId?: string;
 	readonly sponsored?: boolean;
 	readonly featured?: boolean;
+	readonly activity?: boolean;
 	readonly draft?: boolean;
 	readonly latitude: number;
 	readonly longitude: number;
