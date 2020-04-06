@@ -1,9 +1,5 @@
 import React from "react";
-import {
-	Button, createStyles, Fab,
-	Paper, Table, TableBody,
-	TableCell, TableHead, TableRow, Theme
-} from "@material-ui/core";
+import {createStyles, Fab, Paper, Theme} from "@material-ui/core";
 import {useHistory} from "react-router-dom";
 import AppLoader from "./AppLoader";
 import Alert from "@material-ui/lab/Alert";
@@ -67,34 +63,6 @@ export default function ThemeList() {
 						<ThemeExpandableListItem key={theme.id} theme={theme}/>
 					))
 			}
-			{/*<Table className={classes.table} aria-label="simple table">*/}
-			{/*	<TableHead>*/}
-			{/*		<TableRow>*/}
-			{/*			<TableCell>Nom</TableCell>*/}
-			{/*			<TableCell align="center">Icône</TableCell>*/}
-			{/*			<TableCell align="right">Actions</TableCell>*/}
-			{/*		</TableRow>*/}
-			{/*	</TableHead>*/}
-			{/*	<TableBody>*/}
-			{/*		{themes.map(theme => (*/}
-			{/*			<TableRow key={theme.id}>*/}
-			{/*				<TableCell component="th" scope="row">*/}
-			{/*					{theme.name.find(t => t.language.code === 'fr')?.resource}*/}
-			{/*				</TableCell>*/}
-			{/*				<TableCell align="center">*/}
-			{/*					<img className={classes.themeIcon} src={theme.icon?.url}  alt={`Aucune icon`}/>*/}
-			{/*				</TableCell>*/}
-			{/*				<TableCell align="right">*/}
-			{/*					<Button*/}
-			{/*						color={"primary"}*/}
-			{/*						onClick={() => navigation.push(`/themes/${theme.id}`)}>*/}
-			{/*						Modifier*/}
-			{/*					</Button>*/}
-			{/*				</TableCell>*/}
-			{/*			</TableRow>*/}
-			{/*		))}*/}
-			{/*	</TableBody>*/}
-			{/*</Table>*/}
 		</Paper>
 	</div>;
 }

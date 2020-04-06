@@ -15,8 +15,8 @@ const useStyles = makeStyles((theme: Theme) =>
 		themeIcon: {
 			height: theme.spacing(2),
 		},
-		panelSummary: {
-			// flexGrow: 1
+		list: {
+			paddingLeft: theme.spacing(2)
 		}
 	}),
 );
@@ -56,7 +56,7 @@ export default function  ThemeExpandableListItem({theme}: ThemeExpansionPanelPro
 		</ListItem>
 		{
 			theme.subThemes && theme.subThemes.length > 0 && <Collapse in={expanded}>
-          <List component={"div"}>
+          <List component={"div"} className={classes.list}>
 						{
 							(theme.subThemes ?? []).map(subTheme => (
 								<ThemeExpandableListItem key={subTheme.id} theme={subTheme}/>
