@@ -11,4 +11,8 @@ export default class AxiosUserService extends AbstractAxiosService implements Us
 		return await this.get('/user');
 	}
 
+	public async getUser(id: string): Promise<User> {
+		return await this.get(`/user/${id}`);
+	}
+
 }

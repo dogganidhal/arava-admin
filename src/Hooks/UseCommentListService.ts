@@ -6,7 +6,12 @@ import Comment from "../Data/Model/Comment";
 
 type CommentListServiceResponse = [boolean, ApiException, Comment[]];
 
-export default function useCommentListService(): CommentListServiceResponse {
+export enum CommentListType {
+	UNAPPROVED,
+	ARCHIVE
+}
+
+export default function useCommentListService(type: CommentListType): CommentListServiceResponse {
 	const [isLoading, setLoading] = useState(false);
 	const [exception, setException] = useState();
 	const [comments, setComments] = useState<Comment[]>([]);
@@ -14,7 +19,10 @@ export default function useCommentListService(): CommentListServiceResponse {
 
 	useEffect(() => {
 		setLoading(true);
-		commentService.listUnapprovedComments()
+		const promise = type === CommentListType.UNAPPROVED ?
+			commentService.listUnapprovedComments() :
+			commentService.listArchiveComments();
+		promise
 			.then(comments => setComments(comments))
 			.catch(exception => setException(exception))
 			.finally(() => setLoading(false));

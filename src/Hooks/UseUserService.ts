@@ -4,21 +4,21 @@ import UserService from "../Data/Service/User/UserService";
 import User from "../Data/Model/User";
 import ApiException from "../Data/Model/ApiException";
 
-type UseUserListServiceResponse = [boolean, ApiException, User[]];
+type UseUserServiceResponse = [boolean, ApiException, User];
 
-export default function useUserListService(): UseUserListServiceResponse {
+export default function useUserService(id: string): UseUserServiceResponse {
 	const [loading, setLoading] = useState(false);
 	const [exception, setException] = useState();
-	const [users, setUsers] = useState<User[]>([]);
+	const [user, setUser] = useState();
 	const userService = useIoC(UserService);
 
 	useEffect(() => {
 		setLoading(true);
-		userService.listUsers()
-			.then(users => setUsers(users))
+		userService.getUser(id)
+			.then(user => setUser(user))
 			.catch(exception => setException(exception))
 			.finally(() => setLoading(false));
 	}, []);
 
-	return [loading, exception, users];
+	return [loading, exception, user];
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import PoiList from "../Components/PoiList";
-import {faComment, faGlobeAsia, faMapMarker, faTasks} from "@fortawesome/free-solid-svg-icons";
+import {faComment, faGlobeAsia, faMapMarker, faTasks, faUser} from "@fortawesome/free-solid-svg-icons";
 import IslandList from "../Components/IslandList";
 import EditIsland from "../Components/EditIsland";
 import CreatePoi from "../Components/CreatePoi";
@@ -13,6 +13,9 @@ import CommentList from "../Components/CommentList";
 import AdminRestricted from "../Components/AdminRestricted";
 import PartnerPoiList from "../Components/PartnerPoiList";
 import PartnerEditPoi from "../Components/PartnerEditPoi";
+import CommentTabSwitch from "../Components/CommentTabSwitch";
+import UserList from "../Components/UserList";
+import UserCard from "../Components/UserCard";
 
 interface IRouteConfig {
 	readonly path: string;
@@ -87,8 +90,21 @@ const NavigationConfig: INavigationConfig = {
 		{
 			path: '/comments',
 			title: `Commentaires`,
-			component: <CommentList />,
+			component: <CommentTabSwitch />,
 			icon: <ThemedFontawesomeIcon icon={faComment} />,
+			exact: true,
+			adminOnly: true
+		},
+		{
+			path: '/users/:userId',
+			component: <UserCard />,
+			adminOnly: true
+		},
+		{
+			path: '/users',
+			title: `Users`,
+			component: <UserList />,
+			icon: <ThemedFontawesomeIcon icon={faUser} />,
 			exact: true,
 			adminOnly: true
 		},

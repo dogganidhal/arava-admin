@@ -38,8 +38,6 @@ export default function PartnerEditPoi() {
 	const {poiId} = useParams<EditPoiProps>();
 	const [isLoading, exception, poi] = usePoiService(poiId);
 
-	console.log({isLoading, exception, poi});
-
 	if (exception) {
 		if (exception.status === 401) {
 			return <AccessDenied />;

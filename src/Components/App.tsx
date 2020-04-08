@@ -53,7 +53,6 @@ export default function App() {
               </Route>
               {
                 NavigationConfig.routes.map((route, index) => {
-                  console.log({route: route.path, allowed: !route.adminOnly || isAdmin});
                   return <Route key={index} path={route.path} exact={route.exact}>
                       {(!route.adminOnly || isAdmin) ?
                         route.component :
