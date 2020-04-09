@@ -1,10 +1,10 @@
-import Comment from "../../Model/Comment";
+import Rating from "../../Model/Rating";
 
 
 export default abstract class CommentService {
-	abstract listUnapprovedComments(): Promise<Comment[]>;
-	abstract listArchiveComments(): Promise<Comment[]>;
-	abstract approveComment(comment: Comment): Promise<void>;
-	abstract declineComment(comment: Comment): Promise<void>;
-	abstract deleteComment(comment: Comment): Promise<void>;
+	abstract listUnapprovedComments(): Promise<Rating[]>;
+	abstract listArchiveComments(): Promise<Rating[]>;
+	abstract approveComment(comment: Rating): Promise<void>;
+	abstract declineComment(comment: Rating): Promise<void>;
+	abstract deleteComment(comment: Rating): Promise<void>;
 }

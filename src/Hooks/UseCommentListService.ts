@@ -2,9 +2,9 @@ import {useEffect, useState} from "react";
 import useIoC from "./UseIoC";
 import CommentService from "../Data/Service/Comment/CommentService";
 import ApiException from "../Data/Model/ApiException";
-import Comment from "../Data/Model/Comment";
+import Rating from "../Data/Model/Rating";
 
-type CommentListServiceResponse = [boolean, ApiException, Comment[]];
+type CommentListServiceResponse = [boolean, ApiException, Rating[]];
 
 export enum CommentListType {
 	UNAPPROVED,
@@ -14,7 +14,7 @@ export enum CommentListType {
 export default function useCommentListService(type: CommentListType): CommentListServiceResponse {
 	const [isLoading, setLoading] = useState(false);
 	const [exception, setException] = useState();
-	const [comments, setComments] = useState<Comment[]>([]);
+	const [comments, setComments] = useState<Rating[]>([]);
 	const commentService = useIoC(CommentService);
 
 	useEffect(() => {
