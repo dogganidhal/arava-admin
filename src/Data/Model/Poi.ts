@@ -19,6 +19,7 @@ export default interface Poi {
 	readonly sponsored: boolean;
 	readonly featured: boolean;
 	readonly draft: boolean;
+	readonly premium: boolean;
 	readonly activity: boolean;
 	readonly mainImage: Media;
 	readonly medias: Media[];

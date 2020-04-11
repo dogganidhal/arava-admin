@@ -52,6 +52,7 @@ export default function CreatePoiForm() {
 	const [featured, setFeatured] = useState(false);
 	const [draft, setDraft] = useState(true);
 	const [activity, setActivity] = useState(false);
+	const [premium, setPremium] = useState(false);
 	const [latitude, setLatitude] = useState(0);
 	const [longitude, setLongitude] = useState(0);
 	const [island, setIsland] = useState<Island>();
@@ -97,7 +98,7 @@ export default function CreatePoiForm() {
 		const request: PoiWriteRequest = {
 			title, description, details,
 			latitude, longitude,
-			sponsored, featured, draft, activity,
+			sponsored, featured, draft, activity, premium,
 			themeId: theme!.id,
 			islandId: island!.id,
 			ownerId: owner?.id,
@@ -111,7 +112,7 @@ export default function CreatePoiForm() {
 	}, [
 		title, details, description,
 		latitude, longitude, theme, draft,
-		sponsored, featured, medias,
+		sponsored, featured, medias, premium,
 		island, mainImage, owner, activity
 	]);
 
@@ -217,6 +218,16 @@ export default function CreatePoiForm() {
 						/>
 					}
 					label="Activité"
+				/>
+				<FormControlLabel
+					control={
+						<Switch
+							checked={premium}
+							onChange={() => setPremium(!premium)}
+							color="primary"
+						/>
+					}
+					label="Premium +"
 				/>
 				<FormControlLabel
 					control={
