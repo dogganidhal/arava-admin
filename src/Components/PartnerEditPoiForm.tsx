@@ -87,7 +87,12 @@ export default function PartnerEditPoiForm({ poi }: EditPoiFormProps) {
 			latitude, longitude,
 			draft, details,
 			medias: files,
-			mainImage: mainMediaFile
+			mainImage: mainMediaFile,
+			featured: poi.featured,
+			sponsored: poi.sponsored,
+			activity: poi.activity,
+			premium: poi.premium,
+			defaultPremium: poi.defaultPremium
 		};
 		poiService.updatePoi(request)
 			.then(() => setSuccess(true))

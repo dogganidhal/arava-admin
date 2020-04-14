@@ -65,6 +65,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 	const [featured, setFeatured] = useState(poi.featured);
 	const [draft, setDraft] = useState(poi.draft);
 	const [premium, setPremium] = useState(poi.premium);
+	const [defaultPremium, setDefaultPremium] = useState(poi.defaultPremium);
 	const [activity, setActivity] = useState(poi.activity);
 	const [latitude, setLatitude] = useState(poi.coordinate.latitude);
 	const [longitude, setLongitude] = useState(poi.coordinate.longitude);
@@ -98,7 +99,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 		const mainMediaFile = mainImage && await mediaService.upload(mainImage);
 		const request: PoiWriteRequest = {
 			id: poi.id, title, description,
-			latitude, longitude, themeId: theme.id,
+			latitude, longitude, themeId: theme.id, defaultPremium,
 			sponsored, featured, draft, details, activity,
 			medias: files, islandId: island.id, premium,
 			mainImage: mainMediaFile, ownerId: owner?.id
@@ -113,7 +114,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 		sponsored, medias, mainImage,
 		island, setException, setLoading,
 		loading, exception, poi, featured,
-		owner, activity, premium
+		owner, activity, premium, defaultPremium
 	]);
 
 	const toggleDeleteDialog = () => setDeleteDialogOpen(!deleteDialogOpen);
@@ -275,7 +276,17 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 							color="primary"
 						/>
 					}
-					label="Premium +"
+					label="Premium+"
+				/>
+				<FormControlLabel
+					control={
+						<Switch
+							checked={defaultPremium}
+							onChange={() => setDefaultPremium(!defaultPremium)}
+							color="primary"
+						/>
+					}
+					label="Premium+ par défaut"
 				/>
 				<FormControlLabel
 					control={

@@ -20,6 +20,7 @@ export default interface Poi {
 	readonly featured: boolean;
 	readonly draft: boolean;
 	readonly premium: boolean;
+	readonly defaultPremium: boolean;
 	readonly activity: boolean;
 	readonly mainImage: Media;
 	readonly medias: Media[];
