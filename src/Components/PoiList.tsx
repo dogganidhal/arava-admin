@@ -191,14 +191,12 @@ export default function PoiList() {
 	return <div>
 		<AdminRestricted>
 			<Fab
-				variant={"extended"}
 				size={"large"}
 				color={"primary"}
 				className={classes.fab}
 				component={Link}
 				to={"/pois/create"}>
 				<SearchIcon />
-				Créer
 			</Fab>
 		</AdminRestricted>
 		<MUIDataTable
