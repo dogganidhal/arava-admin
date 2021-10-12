@@ -61,6 +61,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 
 	const [title, setName] = useState(localizedResourceMapper.map(poi.title));
 	const [description, setDescription] = useState(localizedResourceMapper.map(poi.description));
+	const [light, setLight] = useState(poi.light);
 	const [sponsored, setSponsored] = useState(poi.sponsored);
 	const [featured, setFeatured] = useState(poi.featured);
 	const [draft, setDraft] = useState(poi.draft);
@@ -98,7 +99,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 		const files = await mediaService.upload(medias);
 		const mainMediaFile = mainImage && await mediaService.upload(mainImage);
 		const request: PoiWriteRequest = {
-			id: poi.id, title, description,
+			id: poi.id, title, description, light,
 			latitude, longitude, themeId: theme.id, defaultPremium,
 			sponsored, featured, draft, details, activity,
 			medias: files, islandId: island.id, premium,
@@ -111,7 +112,7 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 	}, [
 		title, details, description,
 		latitude, longitude, theme, draft,
-		sponsored, medias, mainImage,
+		sponsored, medias, mainImage, light,
 		island, setException, setLoading,
 		loading, exception, poi, featured,
 		owner, activity, premium, defaultPremium
@@ -238,6 +239,16 @@ export default function EditPoiForm({ poi }: EditPoiFormProps) {
 				</Button>
 			</FormGroup>
 			<FormGroup row className={classes.formControl}>
+				<FormControlLabel
+					control={
+						<Switch
+							checked={light}
+							onChange={() => setLight(!light)}
+							color="primary"
+						/>
+					}
+					label="Light"
+				/>
 				<FormControlLabel
 					control={
 						<Switch

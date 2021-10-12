@@ -16,6 +16,7 @@ export default interface Poi {
 	readonly coordinate: LatLng;
 	readonly island: Island;
 	readonly owner?: User;
+	readonly light: boolean;
 	readonly sponsored: boolean;
 	readonly featured: boolean;
 	readonly draft: boolean;

@@ -10,6 +10,7 @@ export default interface PoiWriteRequest {
 	readonly islandId?: string;
 	readonly themeId?: string;
 	readonly ownerId?: string;
+	readonly light?: boolean;
 	readonly sponsored: boolean;
 	readonly featured: boolean;
 	readonly activity: boolean;
